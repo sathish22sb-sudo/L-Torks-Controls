@@ -190,7 +190,7 @@ function renderLandingGrid() {
       <div class="product-card">
         ${
 					imgUrl
-						? `<img class="card-img" src="${imgUrl}" alt="${escHtml(p.name)}"
+						? `<img class="card-img" src="${imgUrl}" alt="${escHtml(p.name)}" width="400" height="180"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
              <div class="card-img-placeholder" style="display:none"><span>\u{1F4E6}</span></div>`
 						: `<div class="card-img-placeholder"><span>\u{1F4E6}</span></div>`
@@ -416,7 +416,7 @@ function renderProductsTable() {
 			const globalIndex = startIndex + idx + 1
 			const imgUrl = p.main_image?.blob_url
 			const imgCell = imgUrl
-				? `<img src="${imgUrl}" style="width:52px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'"/>`
+				? `<img src="${imgUrl}" width="52" height="40" style="width:52px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'"/>`
 				: `<span style="font-size:1.5rem">\u{1F4E6}</span>`
 
 			return `
@@ -1233,7 +1233,7 @@ function renderDetailModal(p) {
       style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1;z-index:100">&times;</button>
     ${
 			imgUrl
-				? `<img src="${escHtml(imgUrl)}" alt="${escHtml(p.name)}"
+				? `<img src="${escHtml(imgUrl)}" alt="${escHtml(p.name)}" width="640" height="300"
            style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;margin-bottom:1.2rem;border:1px solid var(--mid)"
            onerror="this.style.display='none'"/>`
 				: ''
