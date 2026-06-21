@@ -5,6 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L Tork Controls | Electrical & Control Systems</title>
+  <meta name="description"
+    content="L Tork Controls supplies custom-engineered control panels, industrial switchgear, circuit breakers and electrical spare parts for industrial automation across India. Request a quote today." />
+  <link rel="canonical" href="https://l-torks-controls.vercel.app/" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="L Tork Controls | Electrical & Control Systems" />
+  <meta property="og:description"
+    content="Custom-engineered control panels, industrial switchgear and electrical spare parts built for demanding industrial automation environments." />
+  <meta property="og:url" content="https://l-torks-controls.vercel.app/" />
+  <meta property="og:image" content="https://l-torks-controls.vercel.app/assets/images/logo.png" />
 
   <!-- Fonts & Icons -->
   <link
@@ -26,8 +36,8 @@
 <body>
 
   <nav>
-    <a class="nav-logo" onclick="showPage('home')">
-      <img src="assets/images/logo.png" alt="L Tork Controls Logo" class="brand-logo-img"
+    <a class="nav-logo" href="#home-section" onclick="showPage('home')">
+      <img src="assets/images/logo.png" alt="L Tork Controls Logo" class="brand-logo-img" width="450" height="300"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
       <span style="display: none;">L TORK <span>CONTROLS</span></span>
     </a>
@@ -38,11 +48,11 @@
     </button>
 
     <ul class="nav-links" id="nav-links-menu">
-      <li><a onclick="showPage('home'); closeMobileMenu()">Home</a></li>
-      <li><a onclick="goSection('about'); closeMobileMenu()">About</a></li>
-      <li><a onclick="goSection('products'); closeMobileMenu()">Products</a></li>
-      <li><a onclick="goSection('services'); closeMobileMenu()">Services</a></li>
-      <li><a onclick="goSection('contact'); closeMobileMenu()">Contact</a></li>
+      <li><a href="#home-section" onclick="showPage('home'); closeMobileMenu()">Home</a></li>
+      <li><a href="#about" onclick="goSection('about'); closeMobileMenu()">About</a></li>
+      <li><a href="#products" onclick="goSection('products'); closeMobileMenu()">Products</a></li>
+      <li><a href="#services" onclick="goSection('services'); closeMobileMenu()">Services</a></li>
+      <li><a href="#contact" onclick="goSection('contact'); closeMobileMenu()">Contact</a></li>
     </ul>
   </nav>
 
@@ -52,7 +62,7 @@
   <div id="page-login" class="page">
     <div class="login-box">
       <div class="login-logo">
-        <img src="assets/images/logo.png" alt="L Tork Controls Logo" class="brand-logo-img"
+        <img src="assets/images/logo.png" alt="L Tork Controls Logo" class="brand-logo-img" width="450" height="300"
           style="margin: 0 auto 1rem; height: 56px;"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
         <span style="display: none;">L Tork <span>Controls</span></span>
@@ -92,8 +102,8 @@
 
         <!-- Hero Button Wrapper to keep them on a single line on mobile -->
         <div class="hero-btns-wrap">
-          <a class="btn-primary" onclick="goSection('products')">Browse Products</a>
-          <a class="btn-ghost" onclick="goSection('contact')">Get a Quote</a>
+          <a class="btn-primary" href="#products" onclick="goSection('products')">Browse Products</a>
+          <a class="btn-ghost" href="#contact" onclick="goSection('contact')">Get a Quote</a>
         </div>
 
         <div class="hero-stats">
@@ -122,56 +132,47 @@
       <div class="ticker-title">Trusted by Leading Brands Across India</div>
       <div class="ticker-wrapper">
         <div class="ticker-track">
-          <!-- Loop Set 1 -->
+          <!-- Loop Set 1 — served from local assets (not hotlinked) for reliability and to avoid oversized
+               unoptimized third-party images; width/height set to each file's real aspect ratio to prevent layout shift -->
 
-          <div class="ticker-item"><img
-              src="https://npcil.nic.in/WriteReadData/userfiles/image/Essay_Competition_npcil_logo.jpg" alt="NPCIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/npcil.png" alt="NPCIL" width="353" height="566" />
             NPCIL</div>
-          <div class="ticker-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/BHEL_logo.svg"
-              alt="BHEL" /> BHEL</div>
-          <div class="ticker-item"><img
-              src="https://www.deccanchronicle.com/h-upload/2026/04/02/2027693-untitled-design-23.webp" alt="ONGC" />
+          <div class="ticker-item"><img src="assets/clientslogo/bhel.png" alt="BHEL" width="493" height="405" /> BHEL
+          </div>
+          <div class="ticker-item"><img src="assets/clientslogo/apgenco.webp" alt="APGENCO" width="1500" height="900" />
             APGENCO</div>
-          <!-- <div class="ticker-item"><img src="https://img.icons8.com/color/96/factory.png" alt="NTPC" /> NTPC</div> -->
-          <div class="ticker-item"><img
-              src="https://upload.wikimedia.org/wikipedia/commons/5/56/Steel_Authority_of_India_logo.svg" alt="SAIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/sail.svg" alt="SAIL" width="732" height="768" />
             SAIL
           </div>
-          <div class="ticker-item"><img src="https://dwamtec.com/assets/img/d1.png" alt="DWAM" />
+          <div class="ticker-item"><img src="https://dwamtec.com/assets/img/d1.png" alt="DWAM" width="350"
+              height="100" />
             DWAM
           </div>
           <!-- Loop Set 2 (Duplicate for continuous loop) -->
 
-          <div class="ticker-item"><img
-              src="https://npcil.nic.in/WriteReadData/userfiles/image/Essay_Competition_npcil_logo.jpg" alt="NPCIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/npcil.png" alt="NPCIL" width="353" height="566" />
             NPCIL</div>
-          <div class="ticker-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/BHEL_logo.svg"
-              alt="BHEL" /> BHEL</div>
-          <div class="ticker-item"><img
-              src="https://www.deccanchronicle.com/h-upload/2026/04/02/2027693-untitled-design-23.webp" alt="ONGC" />
+          <div class="ticker-item"><img src="assets/clientslogo/bhel.png" alt="BHEL" width="493" height="405" /> BHEL
+          </div>
+          <div class="ticker-item"><img src="assets/clientslogo/apgenco.webp" alt="APGENCO" width="1500" height="900" />
             APGENCO</div>
-          <!-- <div class="ticker-item"><img src="https://img.icons8.com/color/96/factory.png" alt="NTPC" /> NTPC</div> -->
-          <div class="ticker-item"><img
-              src="https://upload.wikimedia.org/wikipedia/commons/5/56/Steel_Authority_of_India_logo.svg" alt="SAIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/sail.svg" alt="SAIL" width="732" height="768" />
             SAIL
           </div>
-          <div class="ticker-item"><img src="https://dwamtec.com/assets/img/d1.png" alt="DWAM" />
+          <div class="ticker-item"><img src="https://dwamtec.com/assets/img/d1.png" alt="DWAM" width="350"
+              height="100" />
             DWAM
           </div>
 
           <!-- loop set 3 (Duplicate for continuous loop) -->
 
-          <div class="ticker-item"><img
-              src="https://npcil.nic.in/WriteReadData/userfiles/image/Essay_Competition_npcil_logo.jpg" alt="NPCIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/npcil.png" alt="NPCIL" width="353" height="566" />
             NPCIL</div>
-          <div class="ticker-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/BHEL_logo.svg"
-              alt="BHEL" /> BHEL</div>
-          <div class="ticker-item"><img
-              src="https://www.deccanchronicle.com/h-upload/2026/04/02/2027693-untitled-design-23.webp" alt="ONGC" />
+          <div class="ticker-item"><img src="assets/clientslogo/bhel.png" alt="BHEL" width="493" height="405" /> BHEL
+          </div>
+          <div class="ticker-item"><img src="assets/clientslogo/apgenco.webp" alt="APGENCO" width="1500" height="900" />
             APGENCO</div>
-          <!-- <div class="ticker-item"><img src="https://img.icons8.com/color/96/factory.png" alt="NTPC" /> NTPC</div> -->
-          <div class="ticker-item"><img
-              src="https://upload.wikimedia.org/wikipedia/commons/5/56/Steel_Authority_of_India_logo.svg" alt="SAIL" />
+          <div class="ticker-item"><img src="assets/clientslogo/sail.svg" alt="SAIL" width="732" height="768" />
             SAIL
           </div>
         </div>
@@ -283,7 +284,7 @@
               <div class="info-label">Address</div>
               <div class="info-value"><a
                   href="https://maps.google.com/?q=L+Tork+Controls,+Plot+no+:+96E,+1st+floor,+SIDCO+Industrial+Estate,+Arakkonam,+Ranipet+Dist+-+631005"
-                  target="_blank">L Tork Controls, Plot no :96E, 1st floor, SIDCO Industrial Estate, Arakkonam,
+                  target="_blank" rel="noopener noreferrer">L Tork Controls, Plot no :96E, 1st floor, SIDCO Industrial Estate, Arakkonam,
                   Ranipet Dist - 631005</a></div>
             </div>
           </div>
@@ -357,12 +358,12 @@
         <div class="footer-col">
           <h4>Company</h4>
           <ul>
-            <li><a onclick="showPage('home')">Home</a></li>
-            <li><a onclick="goSection('about')">About Us</a></li>
-            <li><a onclick="goSection('products')">Products</a></li>
-            <li><a onclick="goSection('services')">Services</a></li>
-            <li><a onclick="goSection('contact')">Contact</a></li>
-            <li><a onclick="openDashboard()">Dashboard</a></li>
+            <li><a href="#home-section" onclick="showPage('home')">Home</a></li>
+            <li><a href="#about" onclick="goSection('about')">About Us</a></li>
+            <li><a href="#products" onclick="goSection('products')">Products</a></li>
+            <li><a href="#services" onclick="goSection('services')">Services</a></li>
+            <li><a href="#contact" onclick="goSection('contact')">Contact</a></li>
+            <li><a href="#" onclick="openDashboard()">Dashboard</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -370,7 +371,7 @@
           <ul>
             <li>
               <a href="https://maps.google.com/?q=L+TORK+CONTROLS+INDUSTRIAL+ESTATE,+96E,+SIDCO+Industrial+Estate,+Winterpet,+Arakkonam,+Tamil+Nadu+631005"
-                target="_blank" style="font-size: 0.8rem; line-height: 1.4">
+                target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; line-height: 1.4">
                 L Tork Controls INDUSTRIAL ESTATE, 96E, SIDCO Industrial Estate, Arakkonam, Ranipet Dist 631005
               </a>
             </li>
@@ -381,6 +382,12 @@
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 L Tork Controls. All Rights Reserved. | Designed by <strong>Vici Studio</strong></p>
+        <p style="margin-top:.4rem">
+          <a href="#" onclick="showPage('privacy')" style="font-size:.78rem">Privacy Policy</a> &nbsp;|&nbsp;
+          <a href="#" onclick="showPage('refund')" style="font-size:.78rem">Refund Policy</a> &nbsp;|&nbsp;
+          <a href="#" onclick="showPage('shipping')" style="font-size:.78rem">Shipping Terms</a> &nbsp;|&nbsp;
+          <a href="#" onclick="showPage('terms')" style="font-size:.78rem">Terms &amp; Conditions</a>
+        </p>
       </div>
     </footer>
   </div><!-- /page-home -->
@@ -392,17 +399,17 @@
     <div style="background:var(--black);min-height:100vh">
       <div class="policy-page">
         <a class="policy-back" onclick="showPage('home')">&larr; Back to Home</a>
-        <h1>Privacy Policy</h1>
+        <h2>Privacy Policy</h2>
         <div class="policy-date">Last Updated: 1 January 2024</div>
         <p>L Tork Controls values client data safety. This document lists data handling terms for architectural
           parameters, company names, emails, and contact options.</p>
-        <h2>1. Information Gathering</h2>
+        <h3>1. Information Gathering</h3>
         <p>We process information submitted voluntarily within component design requests, phone calls, and quotation
           submissions.</p>
-        <h2>2. Data Protection Guidelines</h2>
+        <h3>2. Data Protection Guidelines</h3>
         <p>Your technical layouts and schematics are never distributed to unapproved engineering units without strict
           verification or client signoff.</p>
-        <h2>3. Contact</h2>
+        <h3>3. Contact</h3>
         <p>SIDCO Industrial Estate, Arakkonam, Ranipet Dist - 631005.</p>
       </div>
     </div>
@@ -412,22 +419,22 @@
     <div style="background:var(--black);min-height:100vh">
       <div class="policy-page">
         <a class="policy-back" onclick="showPage('home')">&larr; Back to Home</a>
-        <h1>Refund Policy</h1>
+        <h2>Refund Policy</h2>
         <div class="policy-date">Last Updated: 1 January 2024</div>
         <p>Our team works to verify that every switchgear component matches your hardware configurations before
           dispatch.</p>
-        <h2>1. Returns Verification</h2>
+        <h3>1. Returns Verification</h3>
         <ul>
           <li>Uninstalled items are eligible for returned assessment within <strong style="color:var(--offwhite)">7
               days</strong> of arrival</li>
           <li>All original structural boxes and specification seals must remain unbroken</li>
         </ul>
-        <h2>2. Custom Hardware</h2>
+        <h3>2. Custom Hardware</h3>
         <ul>
           <li>Bespoke electrical control board setups and specifically tailored enclosures are excluded from standard
             returns</li>
         </ul>
-        <h2>3. Inquiry Channel</h2>
+        <h3>3. Inquiry Channel</h3>
         <p>Direct claims to <a href="mailto:infoltorkcontrols@gmail.com"
             style="color:var(--yellow)">infoltorkcontrols@gmail.com</a> for fast review.</p>
       </div>
@@ -438,15 +445,15 @@
     <div style="background:var(--black);min-height:100vh">
       <div class="policy-page">
         <a class="policy-back" onclick="showPage('home')">&larr; Back to Home</a>
-        <h1>Shipping Terms</h1>
+        <h2>Shipping Terms</h2>
         <div class="policy-date">Last Updated: 1 January 2024</div>
         <p>L Tork Controls provides secure delivery services across logistics pipelines.</p>
-        <h2>1. Dispatch Intervals</h2>
+        <h3>1. Dispatch Intervals</h3>
         <ul>
           <li>In-stock devices ship from Ranipet SIDCO within 24 working hours</li>
           <li>Assembled wire configurations require a typical 2&ndash;5 working day testing time</li>
         </ul>
-        <h2>2. Transits</h2>
+        <h3>2. Transits</h3>
         <ul>
           <li><strong>Regional Hubs:</strong> 1&ndash;3 business days</li>
           <li><strong>Extended Zones:</strong> 3&ndash;5 business days</li>
@@ -459,13 +466,13 @@
     <div style="background:var(--black);min-height:100vh">
       <div class="policy-page">
         <a class="policy-back" onclick="showPage('home')">&larr; Back to Home</a>
-        <h1>Terms &amp; Conditions</h1>
+        <h2>Terms &amp; Conditions</h2>
         <div class="policy-date">Last Updated: 1 January 2024</div>
         <p>Engaging our design or procurement services implies acceptance of our standard terms of sale.</p>
-        <h2>1. Accuracy</h2>
+        <h3>1. Accuracy</h3>
         <p>While component drawings and performance load guides are accurate, physical deployment conditions can require
           field-tuning.</p>
-        <h2>2. Jurisdiction Coordinate</h2>
+        <h3>2. Jurisdiction Coordinate</h3>
         <p>All legal disputes fall within jurisdiction channels active in Ranipet District, Tamil Nadu.</p>
       </div>
     </div>
@@ -505,7 +512,7 @@
         <div class="dash-tab active" id="dtab-overview">
           <div class="dash-header">
             <div class="dash-header-text">
-              <h1>Dashboard Overview</h1>
+              <h2>Dashboard Overview</h2>
               <p>L Tork Controls operations snapshot.</p>
             </div>
             <div class="dash-user-badge">Logged in as &nbsp;<span id="dash-user-email"></span></div>
@@ -534,7 +541,7 @@
           </div>
           <div class="dash-section">
             <div class="dash-section-head">
-              <h2>Recent Enquiries</h2>
+              <h3>Recent Enquiries</h3>
               <button class="btn-sm btn-info" onclick="showDashTab('enquiries')">View All</button>
             </div>
             <div class="tbl-wrap">
@@ -563,7 +570,7 @@
         <div class="dash-tab" id="dtab-products">
           <div class="dash-header">
             <div class="dash-header-text">
-              <h1>Products</h1>
+              <h2>Products</h2>
               <p>Add, edit, or remove catalogue items.</p>
             </div>
           </div>
@@ -603,7 +610,7 @@
 
           <div class="dash-section">
             <div class="dash-section-head">
-              <h2>All Products</h2>
+              <h3>All Products</h3>
               <span id="prod-count-lbl" style="color:var(--muted);font-size:.85rem"></span>
             </div>
             <div class="tbl-wrap">
@@ -640,7 +647,7 @@
         <div class="dash-tab" id="dtab-enquiries">
           <div class="dash-header">
             <div class="dash-header-text">
-              <h1>Customer Enquiries</h1>
+              <h2>Customer Enquiries</h2>
               <p>All enquiries submitted through the website contact form.</p>
             </div>
           </div>
@@ -713,7 +720,7 @@
 
           <div class="dash-section">
             <div class="dash-section-head">
-              <h2>Enquiry List</h2>
+              <h3>Enquiry List</h3>
               <span id="enq-count-lbl" style="color:var(--muted);font-size:.85rem"></span>
             </div>
             <div class="tbl-wrap">

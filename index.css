@@ -929,7 +929,7 @@ footer {
     margin: 0 auto;
 }
 
-.policy-page h1 {
+.policy-page h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 2.5rem;
     font-weight: 800;
@@ -945,7 +945,7 @@ footer {
     letter-spacing: .06em;
 }
 
-.policy-page h2 {
+.policy-page h3 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 1.3rem;
     font-weight: 700;
@@ -1111,7 +1111,7 @@ footer {
     gap: 1rem;
 }
 
-.dash-header-text h1 {
+.dash-header-text h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 2rem;
     font-weight: 800;
@@ -1210,7 +1210,7 @@ footer {
     gap: 0.5rem;
 }
 
-.dash-section-head h2 {
+.dash-section-head h3 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 1.1rem;
     font-weight: 700;
