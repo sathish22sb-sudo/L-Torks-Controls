@@ -1,4 +1,21 @@
+# L Tork Controls — Industrial Automation Website
+# Optimised for B2B search engine crawling
+
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /login
+Disallow: /api/
 
-Sitemap: https://l-torks-controls.vercel.app/sitemap.xml
+# Allow Googlebot full access
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 5
+
+# Allow Bingbot
+User-agent: bingbot
+Allow: /
+Crawl-delay: 5
+
+# Sitemaps
+Sitemap: https://www.l-torks-controls.online/sitemap.xml

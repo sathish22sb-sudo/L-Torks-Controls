@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Contact Us — L Tork Controls | Get in Touch</title>
+		<meta
+			name="description"
+			content="Contact L Tork Controls for electrical actuators, limit switches, and industrial automation solutions. Get a quote or technical support today."
+		/>
+		<link rel="canonical" href="https://www.l-torks-controls.online/contact" />
+		<meta name="robots" content="index, follow" />
+		<meta name="author" content="L Tork Controls" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Contact Us — L Tork Controls | Get in Touch" />
+		<meta
+			property="og:description"
+			content="Contact L Tork Controls for electrical actuators, limit switches, and industrial automation solutions. Get a quote or technical support today."
+		/>
+		<meta property="og:url" content="https://www.l-torks-controls.online/contact" />
+		<meta property="og:image" content="https://www.l-torks-controls.online/assets/images/logo.png" />
+		<meta property="og:site_name" content="L Tork Controls" />
+
+		<link rel="icon" type="image/png" href="/assets/images/logo.png" />
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+
+		<link rel="stylesheet" href="/assets/css/styles.css" />
+
+		<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+	</head>
+	<body>
+		<div style="background: var(--black); min-height: 100vh">
+			<nav id="main-nav"></nav>
+
+			<section id="contact" style="padding: 100px 0 60px">
+				<div class="container">
+					<h1>Contact L Tork Controls</h1>
+					<p class="section-sub" style="margin-top: 20px">
+						Need technical integration support, a project quotation, or specific
+						hardware spares? Contact us today.
+					</p>
+					<div class="contact-grid" style="margin-top: 40px">
+						<div>
+							<div class="info-row">
+								<div class="info-icon">&#128221;</div>
+								<div>
+									<div class="info-label">Address</div>
+									<div class="info-value">
+										<a
+											href="https://maps.google.com/?q=L+Tork+Controls,+Plot+no+:+96E,+1st+floor,+SIDCO+Industrial+Estate,+Arakkonam,+Ranipet+Dist+-+631005"
+											target="_blank"
+											rel="noopener noreferrer"
+											>L Tork Controls, Plot no :96E, 1st floor, SIDCO Industrial
+											Estate, Arakkonam, Ranipet Dist - 631005</a
+										>
+									</div>
+								</div>
+							</div>
+							<div class="info-row">
+								<div class="info-icon">&#9993;</div>
+								<div>
+									<div class="info-label">Email</div>
+									<div class="info-value">
+										<a href="mailto:infoltorkcontrols@gmail.com"
+											>infoltorkcontrols@gmail.com</a
+										>
+									</div>
+								</div>
+							</div>
+							<div class="info-row">
+								<div class="info-icon">&#128222;</div>
+								<div>
+									<div class="info-label">Phone</div>
+									<div class="info-value">
+										<a href="tel:+918015261574">+91 80152 61574</a>
+									</div>
+								</div>
+							</div>
+							<div class="info-row">
+								<div class="info-icon">&#128336;</div>
+								<div>
+									<div class="info-label">Hours</div>
+									<div class="info-value">24/7</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<form class="contact-form" onsubmit="handleEnquiry(event)">
+								<div class="form-row">
+									<div class="field">
+										<label>Full Name</label
+										><input
+											type="text"
+											id="eq-name"
+											placeholder="Rajesh Kumar"
+											required
+										/>
+									</div>
+									<div class="field">
+										<label>Company</label
+										><input
+											type="text"
+											id="eq-company"
+											placeholder="Your Company Ltd."
+										/>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="field">
+										<label>Phone</label
+										><input
+											type="tel"
+											id="eq-phone"
+											placeholder="+91 98000 00000"
+											required
+										/>
+									</div>
+									<div class="field">
+										<label>Email <span class="input-required">*</span></label
+										><input
+											type="email"
+											id="eq-email"
+											placeholder="you@company.com"
+											required
+										/>
+									</div>
+								</div>
+								<div class="field">
+									<label
+										>Enquiry Type <span class="input-required">*</span></label
+									>
+									<select id="eq-type" aria-label="Enquiry type" required>
+										<option value="">Select a category</option>
+										<option value="Product Availability">
+											Product Availability
+										</option>
+										<option value="Bulk / OEM Supply">Bulk / OEM Supply</option>
+										<option value="Technical Support">Technical Support</option>
+										<option value="Custom Order">Custom Order</option>
+										<option value="General Enquiry">General Enquiry</option>
+									</select>
+								</div>
+								<div class="field">
+									<label
+										>Message / Part Number
+										<span class="input-required">*</span></label
+									><textarea
+										id="eq-msg"
+										placeholder="List your model parts or describe your layout specs..."
+										required
+									></textarea>
+								</div>
+								<button
+									type="submit"
+									class="btn-primary"
+									style="width: fit-content"
+									id="enq-submit-btn"
+								>
+									Send Enquiry &rarr;
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer id="main-footer"></footer>
+		</div>
+
+		<div id="alert-modal-container"></div>
+
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="/assets/js/config.js"></script>
+		<script src="/services/api.js"></script>
+		<script src="/services/enquiryService.js"></script>
+		<script src="/assets/js/core.js"></script>
+		<script src="/assets/js/home.js"></script>
+		<script>
+			initPage('contact');
+		</script>
+	</body>
+</html>

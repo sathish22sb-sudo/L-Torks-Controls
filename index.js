@@ -45,6 +45,90 @@ let enquirySearchQuery = ''
 let enquiryPageSize = 5
 let enquiryCurrentPage = 1
 
+// ── SEO: Dynamic Metadata + Routing Config ───────────────────────────────────
+const SITE_URL = 'https://www.l-torks-controls.online'
+const DEFAULT_TITLE = 'L Tork Controls | Electrical Actuators, Limit Switches & Industrial Automation in India'
+const DEFAULT_DESC = 'L Tork Controls — trusted manufacturer of electrical actuators, limit switches, control panels and industrial automation solutions since 2000. Based in Arakkonam, Tamil Nadu.'
+
+const SEO_META = {
+	home: {
+		title: DEFAULT_TITLE,
+		description: DEFAULT_DESC,
+		path: '/',
+		canonical: SITE_URL + '/',
+	},
+	login: {
+		title: 'Admin Login | L Tork Controls',
+		description: 'Secure admin dashboard login for L Tork Controls personnel.',
+		path: '/login',
+		canonical: SITE_URL + '/login',
+	},
+	dashboard: {
+		title: 'Dashboard | L Tork Controls',
+		description: 'Admin dashboard for managing products and customer enquiries at L Tork Controls.',
+		path: '/dashboard',
+		canonical: SITE_URL + '/dashboard',
+	},
+	privacy: {
+		title: 'Privacy Policy | L Tork Controls',
+		description: 'L Tork Controls privacy policy — how we handle client data, technical schematics and contact information.',
+		path: '/privacy',
+		canonical: SITE_URL + '/privacy',
+	},
+	refund: {
+		title: 'Refund Policy | L Tork Controls',
+		description: 'L Tork Controls refund and returns policy for industrial electrical components and custom hardware.',
+		path: '/refund',
+		canonical: SITE_URL + '/refund',
+	},
+	shipping: {
+		title: 'Shipping Terms | L Tork Controls',
+		description: 'Shipping and delivery terms for L Tork Controls products across India.',
+		path: '/shipping',
+		canonical: SITE_URL + '/shipping',
+	},
+	terms: {
+		title: 'Terms & Conditions | L Tork Controls',
+		description: 'Terms and conditions for engaging L Tork Controls design, manufacturing and procurement services.',
+		path: '/terms',
+		canonical: SITE_URL + '/terms',
+	},
+}
+
+// Section routes: show 'home' page then scroll to the section
+const SECTION_ROUTES = {
+	about: { page: 'home', section: 'about', title: 'About Us | L Tork Controls', description: 'L Tork Controls — 25+ years of excellence in industrial automation. Trusted manufacturer of electrical actuators and limit switches.', path: '/about', canonical: SITE_URL + '/about' },
+	products: { page: 'home', section: 'products', title: 'Products | L Tork Controls', description: 'Explore our range of electrical actuators, limit switches, control panels and industrial automation components.', path: '/products', canonical: SITE_URL + '/products' },
+	services: { page: 'home', section: 'services', title: 'Services | L Tork Controls', description: 'End-to-end industrial automation solutions — electrical actuator site services, GeM tender support.', path: '/services', canonical: SITE_URL + '/services' },
+	contact: { page: 'home', section: 'contact', title: 'Contact Us | L Tork Controls', description: 'Get in touch with L Tork Controls for product enquiries, technical support and custom orders.', path: '/contact', canonical: SITE_URL + '/contact' },
+}
+
+// ── SEO: Update <title>, <meta description>, canonical, OG tags ─────────────
+function updateSEOMeta(pageId, sectionKey) {
+	let meta
+	if (sectionKey && SECTION_ROUTES[sectionKey]) {
+		meta = SECTION_ROUTES[sectionKey]
+	} else {
+		meta = SEO_META[pageId] || SEO_META.home
+	}
+
+	document.title = meta.title
+
+	setMetaTag('description', meta.description)
+	setMetaTag('og:title', meta.title)
+	setMetaTag('og:description', meta.description)
+	setMetaTag('og:url', meta.canonical)
+
+	const canonicalEl = document.getElementById('dynamic-canonical')
+	if (canonicalEl) canonicalEl.href = meta.canonical
+}
+
+function setMetaTag(name, content) {
+	let el = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`)
+	if (!el) return
+	el.setAttribute('content', content)
+}
+
 // Auto-restore session via the httpOnly auth cookie — ask the backend who we are,
 // since the token itself is never readable from JS.
 async function restoreSession() {
@@ -58,7 +142,7 @@ async function restoreSession() {
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
-function showPage(name) {
+function showPage(name, pushToHistory = true) {
 	if (name === 'dashboard' && !isLoggedIn) name = 'login'
 	document
 		.querySelectorAll('.page')
@@ -66,6 +150,14 @@ function showPage(name) {
 	const pg = document.getElementById('page-' + name)
 	if (pg) pg.classList.add('active')
 	window.scrollTo(0, 0)
+
+	// SEO: update metadata and URL
+	const meta = SEO_META[name] || SEO_META.home
+	updateSEOMeta(name)
+	if (pushToHistory && meta.path) {
+		history.pushState({ page: name }, '', meta.path)
+	}
+
 	if (name === 'dashboard') {
 		const emailEl = document.getElementById('dash-user-email')
 		if (emailEl) emailEl.textContent = authUser?.email || ''
@@ -73,13 +165,32 @@ function showPage(name) {
 	}
 }
 
-function goSection(id) {
-	showPage('home')
+function goSection(id, pushToHistory = true) {
+	const route = SECTION_ROUTES[id]
+	if (route) {
+		showPage(route.page, false)
+		updateSEOMeta(route.page, id)
+		if (pushToHistory) {
+			history.pushState({ page: route.page, section: id }, '', route.path)
+		}
+	} else {
+		showPage('home', pushToHistory)
+	}
 	setTimeout(
 		() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }),
 		60,
 	)
 }
+
+// ── SPA: popstate (browser back/forward) handler ─────────────────────────────
+window.addEventListener('popstate', (e) => {
+	if (!e.state) return
+	if (e.state.section) {
+		goSection(e.state.section, false)
+	} else if (e.state.page) {
+		showPage(e.state.page, false)
+	}
+})
 
 function showDashTab(tab) {
 	document
@@ -186,11 +297,13 @@ function renderLandingGrid() {
 	grid.innerHTML = visibleProducts
 		.map((p) => {
 			const imgUrl = p.main_image?.blob_url
+			const altText = escHtml(p.name || 'Industrial product')
 			return `
       <div class="product-card">
         ${
 					imgUrl
-						? `<img class="card-img" src="${imgUrl}" alt="${escHtml(p.name)}" width="400" height="180"
+						? `<img class="card-img" src="${imgUrl}" alt="${altText} — L Tork Controls" width="400" height="180"
+               loading="lazy"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
              <div class="card-img-placeholder" style="display:none"><span>\u{1F4E6}</span></div>`
 						: `<div class="card-img-placeholder"><span>\u{1F4E6}</span></div>`
@@ -415,8 +528,9 @@ function renderProductsTable() {
 		.map((p, idx) => {
 			const globalIndex = startIndex + idx + 1
 			const imgUrl = p.main_image?.blob_url
+			const altText = escHtml(p.name || 'Product image')
 			const imgCell = imgUrl
-				? `<img src="${imgUrl}" width="52" height="40" style="width:52px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'"/>`
+				? `<img src="${imgUrl}" width="52" height="40" alt="${altText}" style="width:52px;height:40px;object-fit:cover;border-radius:4px" loading="lazy" onerror="this.style.display='none'"/>`
 				: `<span style="font-size:1.5rem">\u{1F4E6}</span>`
 
 			return `
@@ -1201,6 +1315,7 @@ function closeDetailModal() {
 	const modalEl = document.getElementById('detail-modal-overlay')
 	const bsModal = bootstrap.Modal.getInstance(modalEl)
 	if (bsModal) bsModal.hide()
+	removeProductSchema()
 }
 
 function renderDetailModal(p) {
@@ -1214,7 +1329,7 @@ function renderDetailModal(p) {
 	const specsHtml = activeSpecs.length
 		? `<div style="margin-top:1.2rem">
         <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Specifications</div>
-        <table style="width:100%;border-collapse:collapse;border: 1px solid var(--mid)">
+        <table style="width:100%;border-collapse:collapse;border: 1px solid var(--mid)" aria-label="Product specifications">
           ${activeSpecs
 						.map(
 							(s) => `
@@ -1228,13 +1343,24 @@ function renderDetailModal(p) {
       </div>`
 		: ''
 
+	// SEO: Inject Product JSON-LD schema
+	injectProductSchema(p)
+
+	// SEO: Update canonical for product detail page
+	const productSlug = (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+	const productUrl = `${SITE_URL}/product/${p.id}/${productSlug}`
+	const canonicalEl = document.getElementById('dynamic-canonical')
+	if (canonicalEl) canonicalEl.href = productUrl
+	setMetaTag('og:url', productUrl)
+
 	document.getElementById('detail-modal').innerHTML = `
     <button onclick="closeDetailModal()" aria-label="Close"
       style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1;z-index:100">&times;</button>
     ${
 			imgUrl
-				? `<img src="${escHtml(imgUrl)}" alt="${escHtml(p.name)}" width="640" height="300"
+				? `<img src="${escHtml(imgUrl)}" alt="${escHtml(p.name)} — L Tork Controls industrial product" width="640" height="300"
            style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;margin-bottom:1.2rem;border:1px solid var(--mid)"
+           loading="lazy"
            onerror="this.style.display='none'"/>`
 				: ''
 		}
@@ -1262,6 +1388,64 @@ function renderDetailModal(p) {
       </button>
     </div>
   `
+}
+
+// ── SEO: Product JSON-LD Schema Injection ─────────────────────────────────────
+function injectProductSchema(product) {
+	// Remove any previously injected product schema
+	document.getElementById('product-schema-jsonld')?.remove()
+
+	const schema = {
+		'@context': 'https://schema.org',
+		'@type': 'Product',
+		name: product.name,
+		description: product.short_description || product.detailed_description || '',
+		sku: product.sku || undefined,
+		image: product.main_image?.blob_url || undefined,
+		brand: {
+			'@type': 'Brand',
+			name: 'L Tork Controls',
+		},
+		manufacturer: {
+			'@type': 'Organization',
+			name: 'L Tork Controls',
+			address: {
+				'@type': 'PostalAddress',
+				streetAddress: 'Plot No. 96E, 1st Floor, SIDCO Industrial Estate',
+				addressLocality: 'Arakkonam',
+				addressRegion: 'Tamil Nadu',
+				postalCode: '631005',
+				addressCountry: 'IN',
+			},
+		},
+		offers: {
+			'@type': 'Offer',
+			availability: product.status === 'active' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+			url: SITE_URL,
+			priceCurrency: 'INR',
+			seller: {
+				'@type': 'Organization',
+				name: 'L Tork Controls',
+			},
+		},
+	}
+
+	// Clean undefined values
+	const cleaned = JSON.parse(JSON.stringify(schema))
+
+	const script = document.createElement('script')
+	script.id = 'product-schema-jsonld'
+	script.type = 'application/ld+json'
+	script.textContent = JSON.stringify(cleaned)
+	document.head.appendChild(script)
+}
+
+function removeProductSchema() {
+	document.getElementById('product-schema-jsonld')?.remove()
+	// Restore canonical to homepage
+	const canonicalEl = document.getElementById('dynamic-canonical')
+	if (canonicalEl) canonicalEl.href = SITE_URL + '/'
+	setMetaTag('og:url', SITE_URL + '/')
 }
 
 // ── ADVANCED SLIDING WINDOW PAGINATION BUILDER ────────────────────────────────
@@ -1453,12 +1637,40 @@ function escHtml(str) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-loadLandingProducts()
-restoreSession().then(() => {
-	if (
-		isLoggedIn &&
-		document.getElementById('page-dashboard')?.classList.contains('active')
-	) {
-		showPage('dashboard')
+;(function init() {
+	// SEO: Resolve initial page from URL path (SPA deep-link)
+	const initialPath = window.location.pathname.replace(/^\/+|\/+$/g, '')
+	const sectionKey = Object.keys(SECTION_ROUTES).find(
+		(k) => SECTION_ROUTES[k].path.replace(/^\/+|\/+$/g, '') === initialPath,
+	)
+	const pageKey = Object.keys(SEO_META).find(
+		(k) => SEO_META[k].path.replace(/^\/+|\/+$/g, '') === initialPath,
+	)
+
+	if (sectionKey) {
+		const route = SECTION_ROUTES[sectionKey]
+		// Set page active without pushState
+		document.getElementById('page-' + route.page)?.classList.add('active')
+		updateSEOMeta(route.page, sectionKey)
+		history.replaceState({ page: route.page, section: sectionKey }, '', route.path)
+		setTimeout(
+			() => document.getElementById(sectionKey)?.scrollIntoView(),
+			120,
+		)
+	} else if (pageKey && pageKey !== 'home') {
+		showPage(pageKey, false)
+	} else {
+		updateSEOMeta('home')
+		history.replaceState({ page: 'home' }, '', '/')
 	}
-})
+
+	loadLandingProducts()
+	restoreSession().then(() => {
+		if (
+			isLoggedIn &&
+			document.getElementById('page-dashboard')?.classList.contains('active')
+		) {
+			showPage('dashboard', false)
+		}
+	})
+})()

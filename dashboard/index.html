@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard — L Tork Controls Admin</title>
+		<meta name="description" content="L Tork Controls admin dashboard — manage products and enquiries." />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="canonical" href="https://www.l-torks-controls.online/dashboard" />
+
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href="/assets/images/logo.png" />
+
+		<!-- Fonts & Icons -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		/>
+
+		<!-- Bootstrap 5 CSS -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+
+		<!-- Custom Stylesheet -->
+		<link rel="stylesheet" href="/assets/css/styles.css" />
+	</head>
+
+	<body>
+		<nav id="main-nav"></nav>
+
+		<div id="alert-modal-container"></div>
+
+		<main>
+			<h1 class="sr-only">L Tork Controls - Admin Dashboard</h1>
+			<div class="dash-wrap">
+				<div class="dash-sidebar">
+					<div class="dash-sidebar-inner">
+						<h3>Main</h3>
+
+						<!-- Nested horizontal tabs wrapper to allow clean mobile swiping -->
+						<div class="dash-nav-scroll-wrapper">
+							<div
+								class="dash-nav-item active"
+								onclick="showDashTab('overview')"
+								id="dtab-btn-overview"
+							>
+								<span class="icon">&#128202;</span> Overview
+							</div>
+							<div
+								class="dash-nav-item"
+								onclick="showDashTab('products')"
+								id="dtab-btn-products"
+							>
+								<span class="icon">&#128230;</span> Products
+							</div>
+							<div
+								class="dash-nav-item"
+								onclick="showDashTab('enquiries')"
+								id="dtab-btn-enquiries"
+							>
+								<span class="icon">&#128233;</span> Enquiries
+							</div>
+						</div>
+
+						<div class="dash-logout">
+							<button onclick="doLogout()">&#128274;</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="dash-main">
+					<!-- OVERVIEW TAB -->
+					<div class="dash-tab active" id="dtab-overview">
+						<div class="dash-header">
+							<div class="dash-header-text">
+								<h2>Dashboard Overview</h2>
+								<p>L Tork Controls operations snapshot.</p>
+							</div>
+							<div class="dash-user-badge">
+								Logged in as &nbsp;<span id="dash-user-email"></span>
+							</div>
+						</div>
+						<div class="stat-cards">
+							<div class="stat-card yellow">
+								<div class="sc-label">Total Products</div>
+								<div class="sc-value" id="ov-total">—</div>
+								<div class="sc-sub">In catalogue</div>
+							</div>
+							<div class="stat-card green">
+								<div class="sc-label">Active Products</div>
+								<div class="sc-value" id="ov-active">—</div>
+								<div class="sc-sub">Published &amp; visible</div>
+							</div>
+							<div class="stat-card blue">
+								<div class="sc-label">Total Enquiries</div>
+								<div class="sc-value" id="ov-enq">—</div>
+								<div class="sc-sub">All time</div>
+							</div>
+							<div class="stat-card red">
+								<div class="sc-label">New Enquiries</div>
+								<div class="sc-value" id="ov-new-enq">—</div>
+								<div class="sc-sub">Awaiting response</div>
+							</div>
+						</div>
+						<div class="dash-section">
+							<div class="dash-section-head">
+								<h3>Recent Enquiries</h3>
+								<button
+									class="btn-sm btn-info"
+									onclick="showDashTab('enquiries')"
+								>
+									View All
+								</button>
+							</div>
+							<div class="tbl-wrap">
+								<table class="dash-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Company</th>
+											<th>Type</th>
+											<th>Date</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody id="recent-enq-body">
+										<tr>
+											<td
+												colspan="6"
+												style="
+													color: var(--muted);
+													text-align: center;
+													padding: 2rem;
+												"
+											>
+												Loading...
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- PRODUCTS TAB -->
+					<div class="dash-tab" id="dtab-products">
+						<div class="dash-header">
+							<div class="dash-header-text">
+								<h2>Products</h2>
+								<p>Add, edit, or remove catalogue items.</p>
+							</div>
+						</div>
+
+						<!-- Controls Section: Responsive Split controls row -->
+						<div
+							class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3"
+							style="
+								padding: 1.25rem;
+								background: var(--steel);
+								border: 1px solid var(--mid);
+								border-radius: var(--radius);
+							"
+						>
+							<!-- Desktop Controls: Hidden on Mobile -->
+							<div
+								class="align-items-center gap-3 flex-wrap flex-grow-1 d-none d-md-flex"
+								style="max-width: 75%"
+							>
+								<div class="field m-0" style="flex: 1; min-width: 220px">
+									<input
+										type="text"
+										id="prod-search-input"
+										placeholder="Search by name, SKU or description..."
+										oninput="handleProductSearch(this.value)"
+										style="width: 100%"
+									/>
+								</div>
+								<div class="field m-0" style="width: 130px">
+									<select
+										id="prod-limit-select" aria-label="Products per page"
+										onchange="handleProductLimitChange(this.value)"
+										style="
+											width: 100%;
+											background: var(--mid);
+											border: 1px solid #3a4455;
+											color: var(--offwhite);
+										"
+									>
+										<option value="5" selected>5 Rows</option>
+										<option value="10">10 Rows</option>
+										<option value="20">20 Rows</option>
+										<option value="50">50 Rows</option>
+									</select>
+								</div>
+							</div>
+
+							<!-- Mobile Filters Trigger Button: Hidden on Desktop -->
+							<div class="d-md-none">
+								<button
+									class="btn-sm btn-info d-flex align-items-center gap-2"
+									onclick="openProductMobileFilters()"
+									style="
+										padding: 0.65rem 1.1rem;
+										font-size: 0.85rem;
+										border-radius: var(--radius);
+									"
+								>
+									<i class="fa-solid fa-filter"></i> Filters
+								</button>
+							</div>
+
+							<div>
+								<button class="btn-primary" onclick="openAddProduct()">
+									+ Add New Product
+								</button>
+							</div>
+						</div>
+
+						<div class="dash-section">
+							<div class="dash-section-head">
+								<h3>All Products</h3>
+								<span
+									id="prod-count-lbl"
+									style="color: var(--muted); font-size: 0.85rem"
+								></span>
+							</div>
+							<div class="tbl-wrap">
+								<table class="dash-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Image</th>
+											<th>Name / SKU</th>
+											<th>Description</th>
+											<th>Status</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody id="products-tbody">
+										<tr>
+											<td
+												colspan="6"
+												style="
+													color: var(--muted);
+													text-align: center;
+													padding: 2rem;
+												"
+											>
+												Loading...
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- Pagination Controls -->
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: center;
+									flex-wrap: wrap;
+									padding: 1rem 1.25rem;
+									border-top: 1px solid var(--mid);
+									gap: 0.5rem;
+								"
+							>
+								<div
+									id="prod-pagination-info"
+									style="font-size: 0.85rem; color: var(--muted)"
+								>
+									Showing 0 to 0 of 0 entries
+								</div>
+								<div
+									id="prod-pagination-controls"
+									class="d-flex gap-1 flex-wrap align-items-center"
+								></div>
+							</div>
+						</div>
+					</div>
+
+					<!-- ENQUIRIES TAB -->
+					<div class="dash-tab" id="dtab-enquiries">
+						<div class="dash-header">
+							<div class="dash-header-text">
+								<h2>Customer Enquiries</h2>
+								<p>All enquiries submitted through the website contact form.</p>
+							</div>
+						</div>
+
+						<!-- Controls Section: Desktop Filters Row (Hidden on mobile) -->
+						<div
+							class="d-none d-md-flex justify-content-between align-items-end flex-wrap gap-3 mb-3"
+							style="
+								padding: 1.25rem;
+								background: var(--steel);
+								border: 1px solid var(--mid);
+								border-radius: var(--radius);
+							"
+						>
+							<!-- Left Side controls -->
+							<div
+								class="d-flex align-items-center gap-3 flex-wrap flex-grow-1"
+								style="max-width: 55%"
+							>
+								<div class="field m-0" style="flex: 1; min-width: 220px">
+									<label
+										style="
+											font-size: 0.78rem;
+											color: var(--muted);
+											display: block;
+											margin-bottom: 0.3rem;
+										"
+										>Search Customer Info</label
+									>
+									<input
+										type="text"
+										id="enq-search-input"
+										placeholder="Search by Name, Email, Msg..."
+										oninput="handleEnquirySearch(this.value)"
+										style="width: 100%"
+									/>
+								</div>
+								<div class="field m-0" style="width: 120px">
+									<label
+										style="
+											font-size: 0.78rem;
+											color: var(--muted);
+											display: block;
+											margin-bottom: 0.3rem;
+										"
+										>Row Limit</label
+									>
+									<select
+										id="enq-limit-select" aria-label="Enquiries per page"
+										onchange="handleEnquiryLimitChange(this.value)"
+										style="
+											background: var(--mid);
+											border: 1px solid #3a4455;
+											border-radius: 4px;
+											padding: 0.45rem 0.7rem;
+											color: var(--offwhite);
+											font-size: 0.85rem;
+											width: 100%;
+										"
+									>
+										<option value="5" selected>5 Rows</option>
+										<option value="10">10 Rows</option>
+										<option value="20">20 Rows</option>
+										<option value="50">50 Rows</option>
+									</select>
+								</div>
+							</div>
+							<!-- Right Side Controls (Filters) -->
+							<div
+								class="d-flex align-items-end gap-2 flex-wrap justify-content-end"
+							>
+								<div class="field m-0" style="width: 150px">
+									<label
+										style="
+											font-size: 0.78rem;
+											color: var(--muted);
+											display: block;
+											margin-bottom: 0.3rem;
+										"
+										>Status</label
+									>
+									<select
+										id="filter-status" aria-label="Filter by enquiry status"
+										style="
+											background: var(--mid);
+											border: 1px solid #3a4455;
+											border-radius: 4px;
+											padding: 0.45rem 0.7rem;
+											color: var(--offwhite);
+											font-size: 0.85rem;
+											width: 100%;
+										"
+									>
+										<option value="">All Statuses</option>
+										<option value="new">New</option>
+										<option value="in_progress">In Progress</option>
+										<option value="resolved">Resolved</option>
+										<option value="ignored">Ignored</option>
+									</select>
+								</div>
+								<div class="field m-0" style="width: 150px">
+									<label
+										style="
+											font-size: 0.78rem;
+											color: var(--muted);
+											display: block;
+											margin-bottom: 0.3rem;
+										"
+										>Enquiry Type</label
+									>
+									<select
+										id="filter-type" aria-label="Filter by enquiry type"
+										style="
+											background: var(--mid);
+											border: 1px solid #3a4455;
+											border-radius: 4px;
+											padding: 0.45rem 0.7rem;
+											color: var(--offwhite);
+											font-size: 0.85rem;
+											width: 100%;
+										"
+									>
+										<option value="">All Types</option>
+										<option value="Product Availability">
+											Product Availability
+										</option>
+										<option value="Bulk / OEM Supply">Bulk / OEM Supply</option>
+										<option value="Technical Support">Technical Support</option>
+										<option value="Custom Order">Custom Order</option>
+										<option value="General Enquiry">General Enquiry</option>
+									</select>
+								</div>
+								<button
+									class="btn-sm btn-info"
+									onclick="loadAdminEnquiries()"
+									style="
+										padding: 0.6rem 1.1rem;
+										height: 41px;
+										border-radius: var(--radius);
+									"
+								>
+									Apply
+								</button>
+							</div>
+						</div>
+
+						<!-- Mobile Filters Trigger Row: Visible only on mobile -->
+						<div
+							class="d-md-none d-flex justify-content-between align-items-center mb-3"
+							style="
+								padding: 1.25rem;
+								background: var(--steel);
+								border: 1px solid var(--mid);
+								border-radius: var(--radius);
+							"
+						>
+							<h3
+								style="
+									font-family: 'Barlow Condensed', sans-serif;
+									font-weight: 800;
+									font-size: 1.1rem;
+									text-transform: uppercase;
+									margin: 0;
+									color: var(--white);
+								"
+							>
+								Enquiry Controls
+							</h3>
+							<button
+								class="btn-sm btn-info d-flex align-items-center gap-2"
+								onclick="openEnquiryMobileFilters()"
+								style="
+									padding: 0.65rem 1.1rem;
+									font-size: 0.85rem;
+									border-radius: var(--radius);
+								"
+							>
+								<i class="fa-solid fa-filter"></i> Filters
+							</button>
+						</div>
+
+						<div class="dash-section">
+							<div class="dash-section-head">
+								<h3>Enquiry List</h3>
+								<span
+									id="enq-count-lbl"
+									style="color: var(--muted); font-size: 0.85rem"
+								></span>
+							</div>
+							<div class="tbl-wrap">
+								<table class="dash-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Company</th>
+											<th>Phone</th>
+											<th>Email</th>
+											<th>Type</th>
+											<th>Message</th>
+											<th>Status</th>
+											<th>Date</th>
+											<th>Del</th>
+										</tr>
+									</thead>
+									<tbody id="enquiries-tbody">
+										<tr>
+											<td
+												colspan="10"
+												style="
+													color: var(--muted);
+													text-align: center;
+													padding: 2rem;
+												"
+											>
+												Loading...
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- Pagination Controls -->
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: center;
+									flex-wrap: wrap;
+									padding: 1rem 1.25rem;
+									border-top: 1px solid var(--mid);
+									gap: 0.5rem;
+								"
+							>
+								<div
+									id="enq-pagination-info"
+									style="font-size: 0.85rem; color: var(--muted)"
+								>
+									Showing 0 to 0 of 0 entries
+								</div>
+								<div
+									id="enq-pagination-controls"
+									class="d-flex gap-1 flex-wrap align-items-center"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /dash-main -->
+			</div>
+			<!-- /dash-wrap -->
+		</main>
+
+		<!-- ============================================================
+     PRODUCT ADD/EDIT MODAL
+============================================================ -->
+		<div
+			class="modal fade"
+			id="modal-overlay"
+			tabindex="-1"
+			aria-labelledby="modalTitle"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div
+					class="modal-content"
+					style="
+						background: var(--steel);
+						color: var(--offwhite);
+						border: 1px solid var(--mid);
+					"
+				>
+					<div
+						class="modal-header"
+						style="
+							border-bottom: 1px solid var(--mid);
+							padding: 1.5rem 2rem 1rem;
+						"
+					>
+						<h3
+							class="modal-title"
+							id="modal-title"
+							style="
+								font-family: 'Barlow Condensed', sans-serif;
+								font-size: 1.5rem;
+								font-weight: 800;
+								text-transform: uppercase;
+								color: var(--white);
+								margin: 0;
+							"
+						>
+							Add New Product
+						</h3>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+							onclick="closeModal()"
+						></button>
+					</div>
+					<div
+						class="modal-body"
+						style="max-height: 70vh; overflow-y: auto; padding: 2rem"
+					>
+						<form id="product-form" onsubmit="return false">
+							<!-- Name + SKU -->
+							<div class="two-col">
+								<div class="field">
+									<label
+										>Product Name <span class="input-required">*</span></label
+									>
+									<input
+										type="text"
+										id="p-name"
+										placeholder="e.g. Switchgear Module"
+									/>
+								</div>
+								<div class="field">
+									<label>SKU / Part Number</label>
+									<input type="text" id="p-sku" placeholder="LTK-001" />
+								</div>
+							</div>
+
+							<!-- Short Description -->
+							<div class="field mg">
+								<label>Short Description</label>
+								<textarea
+									id="p-short-desc"
+									style="min-height: 60px"
+									placeholder="One-line summary shown on product cards..."
+								></textarea>
+							</div>
+
+							<!-- Detailed Description -->
+							<div class="field mg">
+								<label>Detailed Description</label>
+								<textarea
+									id="p-detailed-desc"
+									style="min-height: 80px"
+									placeholder="Full product details, specs narrative, use cases..."
+								></textarea>
+							</div>
+
+							<!-- Status -->
+							<div class="field mg">
+								<label>Status</label>
+								<select
+									id="p-status" aria-label="Product status"
+									style="
+										background: var(--mid);
+										border: 1px solid #3a4455;
+										border-radius: 4px;
+										padding: 0.5rem 0.7rem;
+										color: var(--offwhite);
+										font-size: 0.9rem;
+										width: 100%;
+									"
+								>
+									<option value="draft">Draft</option>
+									<option value="active">Active (visible on website)</option>
+									<option value="out_of_stock">Out of Stock</option>
+									<option value="archived">Archived</option>
+								</select>
+							</div>
+
+							<!-- Files -->
+							<div class="two-col">
+								<div class="field">
+									<label>Product Image (jpg / png)</label>
+									<input
+										type="file"
+										id="p-image-file"
+										accept=".jpg,.jpeg,.png,.webp"
+									/>
+								</div>
+								<div class="field">
+									<label>Catalogue PDF</label>
+									<input type="file" id="p-catalogue-file" accept=".pdf" />
+								</div>
+							</div>
+
+							<!-- Specifications -->
+							<div class="field mg">
+								<div
+									style="
+										display: flex;
+										align-items: center;
+										justify-content: space-between;
+										margin-bottom: 0.5rem;
+									"
+								>
+									<label style="margin: 0">Specifications</label>
+									<button
+										type="button"
+										onclick="addSpec()"
+										style="
+											font-size: 0.78rem;
+											background: rgba(80, 140, 250, 0.12);
+											color: var(--yellow);
+											border: 1px solid rgba(80, 140, 250, 0.3);
+											border-radius: 4px;
+											padding: 0.25rem 0.7rem;
+											cursor: pointer;
+										"
+									>
+										+ Add Row
+									</button>
+								</div>
+								<div
+									id="specs-container"
+									style="
+										display: flex;
+										flex-direction: column;
+										gap: 0.4rem;
+										max-height: 180px;
+										overflow-y: auto;
+										padding-right: 2px;
+									"
+								></div>
+								<p
+									style="
+										font-size: 0.73rem;
+										color: var(--muted);
+										margin-top: 0.4rem;
+									"
+								>
+									Key / Value pairs shown in the product spec table (e.g.
+									Current Rating → 63A).
+								</p>
+							</div>
+						</form>
+					</div>
+					<div
+						class="modal-footer"
+						style="border-top: 1px solid var(--mid); padding: 1rem 2rem"
+					>
+						<button
+							class="btn-primary"
+							onclick="saveProduct()"
+							id="save-product-btn"
+						>
+							Save Product
+						</button>
+						<button
+							class="btn-ghost"
+							onclick="closeModal()"
+							style="margin-left: 0"
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ============================================================
+     ENQUIRY DETAIL VIEW MODAL
+============================================================ -->
+		<div
+			class="modal fade"
+			id="enquiry-detail-modal-overlay"
+			tabindex="-1"
+			aria-labelledby="enquiryDetailLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div
+					class="modal-content"
+					style="
+						background: var(--steel);
+						color: var(--offwhite);
+						border: 1px solid var(--mid);
+					"
+				>
+					<div
+						class="modal-header"
+						style="
+							border-bottom: 1px solid var(--mid);
+							padding: 1.5rem 2rem 1rem;
+						"
+					>
+						<h3
+							class="modal-title"
+							id="enquiryDetailLabel"
+							style="
+								font-family: 'Barlow Condensed', sans-serif;
+								font-size: 1.5rem;
+								font-weight: 800;
+								text-transform: uppercase;
+								color: var(--white);
+								margin: 0;
+							"
+						>
+							Enquiry Details
+						</h3>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div
+						class="modal-body"
+						id="enquiry-detail-modal"
+						style="padding: 2rem; max-height: 80vh; overflow-y: auto"
+					>
+						<!-- Dynamically Injected Table -->
+					</div>
+					<div
+						class="modal-footer"
+						style="border-top: 1px solid var(--mid); padding: 1rem 2rem"
+					>
+						<button
+							class="btn-ghost"
+							style="margin: 0; padding: 0.55rem 1.5rem"
+							data-bs-dismiss="modal"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ============================================================
+     MOBILE VIEW PRODUCT FILTER MODAL
+============================================================ -->
+		<div
+			class="modal fade"
+			id="product-filter-modal"
+			tabindex="-1"
+			aria-labelledby="detailModalLabel"
+			aria-hidden="true"
+			style="z-index: 2045"
+		>
+			<div class="modal-dialog modal-dialog-centered">
+				<div
+					class="modal-content"
+					style="
+						background: var(--steel);
+						color: var(--offwhite);
+						border: 1px solid var(--mid);
+					"
+				>
+					<div class="modal-header" style="border-bottom: 1px solid var(--mid)">
+						<h3
+							class="modal-title"
+							style="
+								font-family: 'Barlow Condensed', sans-serif;
+								font-size: 1.3rem;
+								font-weight: 800;
+								text-transform: uppercase;
+								color: var(--white);
+							"
+						>
+							Filter Products
+						</h3>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body" style="padding: 1.5rem">
+						<div class="field mb-3">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Search Query</label
+							>
+							<input
+								type="text"
+								id="prod-search-input-mob"
+								placeholder="Search product name or SKU..."
+								style="width: 100%"
+							/>
+						</div>
+						<div class="field">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Rows Per Page</label
+							>
+							<select
+								id="prod-limit-select-mob" aria-label="Products per page"
+								style="
+									width: 100%;
+									background: var(--mid);
+									border: 1px solid #3a4455;
+									color: var(--offwhite);
+								"
+							>
+								<option value="5" selected>5 Rows</option>
+								<option value="10">10 Rows</option>
+								<option value="20">20 Rows</option>
+								<option value="50">50 Rows</option>
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer" style="border-top: 1px solid var(--mid)">
+						<button
+							type="button"
+							class="btn-primary"
+							onclick="applyProductMobileFilters()"
+							style="padding: 0.5rem 1.5rem"
+						>
+							Apply Filters
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ============================================================
+     MOBILE VIEW ENQUIRIES FILTER MODAL
+============================================================ -->
+		<div
+			class="modal fade"
+			id="enquiry-filter-modal"
+			tabindex="-1"
+			aria-labelledby="enquiryFilterLabel"
+			aria-hidden="true"
+			style="z-index: 2045"
+		>
+			<div class="modal-dialog modal-dialog-centered">
+				<div
+					class="modal-content"
+					style="
+						background: var(--steel);
+						color: var(--offwhite);
+						border: 1px solid var(--mid);
+					"
+				>
+					<div class="modal-header" style="border-bottom: 1px solid var(--mid)">
+						<h3
+							class="modal-title"
+							style="
+								font-family: 'Barlow Condensed', sans-serif;
+								font-size: 1.3rem;
+								font-weight: 800;
+								text-transform: uppercase;
+								color: var(--white);
+							"
+						>
+							Filter Enquiries
+						</h3>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body" style="padding: 1.5rem">
+						<div class="field mb-3">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Search Customer</label
+							>
+							<input
+								type="text"
+								id="enq-search-input-mob"
+								placeholder="Search by name, email, message..."
+								style="width: 100%"
+							/>
+						</div>
+						<div class="field mb-3">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Rows Per Page</label
+							>
+							<select
+								id="enq-limit-select-mob" aria-label="Enquiries per page"
+								style="
+									background: var(--mid);
+									border: 1px solid #3a4455;
+									color: var(--offwhite);
+									width: 100%;
+								"
+							>
+								<option value="5" selected>5 Rows</option>
+								<option value="10">10 Rows</option>
+								<option value="20">20 Rows</option>
+								<option value="50">50 Rows</option>
+							</select>
+						</div>
+						<div class="field mb-3">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Status</label
+							>
+							<select
+								id="filter-status-mob" aria-label="Filter by enquiry status"
+								style="
+									background: var(--mid);
+									border: 1px solid #3a4455;
+									color: var(--offwhite);
+									width: 100%;
+								"
+							>
+								<option value="">All Statuses</option>
+								<option value="new">New</option>
+								<option value="in_progress">In Progress</option>
+								<option value="resolved">Resolved</option>
+								<option value="ignored">Ignored</option>
+							</select>
+						</div>
+						<div class="field">
+							<label
+								style="
+									font-size: 0.78rem;
+									color: var(--muted);
+									display: block;
+									margin-bottom: 0.3rem;
+								"
+								>Enquiry Type</label
+							>
+							<select
+								id="filter-type-mob" aria-label="Filter by enquiry type"
+								style="
+									background: var(--mid);
+									border: 1px solid #3a4455;
+									color: var(--offwhite);
+									width: 100%;
+								"
+							>
+								<option value="">All Types</option>
+								<option value="Product Availability">
+									Product Availability
+								</option>
+								<option value="Bulk / OEM Supply">Bulk / OEM Supply</option>
+								<option value="Technical Support">Technical Support</option>
+								<option value="Custom Order">Custom Order</option>
+								<option value="General Enquiry">General Enquiry</option>
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer" style="border-top: 1px solid var(--mid)">
+						<button
+							type="button"
+							class="btn-primary"
+							onclick="applyEnquiryMobileFilters()"
+							style="padding: 0.5rem 1.5rem"
+						>
+							Apply Filters
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ============================================================
+     SCREEN CENTER CUSTOM ALERT/CONFIRM POPUP
+============================================================ -->
+		<div
+			class="modal fade"
+			id="custom-alert-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			style="z-index: 2050"
+		>
+			<div class="modal-dialog modal-dialog-centered" style="max-width: 400px">
+				<div
+					class="modal-content text-center"
+					style="
+						background: var(--steel);
+						color: var(--offwhite);
+						border: 1px solid var(--mid);
+						border-radius: 8px;
+						padding: 2rem;
+						box-shadow: 0 15px 40px rgba(14, 47, 118, 0.15);
+					"
+				>
+					<div
+						id="custom-alert-icon"
+						style="font-size: 3.5rem; margin-bottom: 0.8rem; line-height: 1"
+					></div>
+					<h3
+						id="custom-alert-title"
+						style="
+							font-family: 'Barlow Condensed', sans-serif;
+							font-size: 1.6rem;
+							font-weight: 800;
+							text-transform: uppercase;
+							color: var(--white);
+							margin-bottom: 0.5rem;
+						"
+					>
+						System Message
+					</h3>
+					<p
+						id="custom-alert-message"
+						style="
+							color: var(--muted);
+							font-size: 0.95rem;
+							margin-bottom: 1.5rem;
+							line-height: 1.5;
+						"
+					></p>
+					<div
+						class="d-flex justify-content-center gap-2"
+						id="custom-alert-actions"
+					>
+						<button
+							id="custom-alert-cancel-btn"
+							class="btn-ghost"
+							style="margin: 0; padding: 0.55rem 1.5rem"
+							onclick="closeCustomAlert(false)"
+						>
+							Cancel
+						</button>
+						<button
+							id="custom-alert-ok-btn"
+							class="btn-primary"
+							style="padding: 0.55rem 1.5rem"
+							onclick="closeCustomAlert(true)"
+						>
+							OK
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+		<script src="/assets/js/config.js"></script>
+		<script src="/services/api.js"></script>
+		<script src="/services/productService.js"></script>
+		<script src="/services/enquiryService.js"></script>
+		<script src="/assets/js/core.js"></script>
+		<script src="/assets/js/dashboard.js"></script>
+	</body>
+</html>
