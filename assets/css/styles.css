@@ -246,16 +246,12 @@ body .btn-info:hover {
 /* ── LOGIN PAGE ── */
 #page-login {
 	min-height: 100vh;
-	display: none;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	background: var(--black);
 	position: relative;
 	overflow: hidden;
-}
-
-#page-login.active {
-	display: flex;
 }
 
 #page-login::before {
