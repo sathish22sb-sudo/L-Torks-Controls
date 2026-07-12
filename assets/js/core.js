@@ -126,6 +126,7 @@ function renderFooter() {
 				<li><a href="/about">About Us</a></li>
 				<li><a href="/products">Products</a></li>
 				<li><a href="/contact">Contact</a></li>
+				<li><a href="/dashboard">Dashboard</a></li>
 			</ul>
 		</div>
 		<div class="footer-col">
