@@ -1153,5 +1153,12 @@
 		<script src="/services/enquiryService.js"></script>
 		<script src="/assets/js/core.js"></script>
 		<script src="/assets/js/dashboard.js"></script>
+
+		<script>
+			document.getElementById('alert-modal-container').innerHTML = renderAlertModal();
+			renderNav('dashboard');
+			renderFooter();
+			initDashboard();
+		</script>
 	</body>
 </html>

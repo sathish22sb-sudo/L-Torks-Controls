@@ -6,11 +6,10 @@ const frontendRoot = path.resolve(__dirname, '..')
 const backendSrc = path.resolve(__dirname, '..', '..', 'backend', 'src')
 
 test.describe('Dashboard - Auth Redirect', () => {
-  test('dashboard page loads without crash', async ({ page }) => {
+  test('dashboard redirects unauthenticated users to login', async ({ page }) => {
     await page.goto('/dashboard')
     await page.waitForTimeout(3000)
-    const body = page.locator('body')
-    await expect(body).toBeVisible()
+    await expect(page).toHaveURL(/\/login/)
   })
 })
 
