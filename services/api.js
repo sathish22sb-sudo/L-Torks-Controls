@@ -7,7 +7,7 @@ const _request = async (method, path, body = null, isFormData = false) => {
 
   // Auth token lives in an httpOnly cookie set by the backend — never touched by JS.
   // 'include' makes the browser send/accept it even though frontend and backend are on different domains.
-  const options = { method, headers, credentials: 'include' }
+  const options = { method, headers, credentials: 'include', cache: 'no-store' }
   if (body) options.body = isFormData ? body : JSON.stringify(body)
 
   const res = await fetch(

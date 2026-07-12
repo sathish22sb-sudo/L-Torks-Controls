@@ -41,7 +41,10 @@ function renderLandingGrid() {
 
 	grid.innerHTML = visibleProducts
 		.map((p) => {
-			const imgUrl = p.main_image?.blob_url
+			const images = p.images && p.images.length > 0 ? p.images : []
+			const imgUrl = images.length > 0
+				? (images.find(i => i.is_primary) || images[0]).blob_url
+				: p.main_image?.blob_url || null
 			const altText = escHtml(p.name || 'Industrial product')
 			return `
       <div class="product-card">
@@ -108,7 +111,10 @@ function closeDetailModal() {
 }
 
 function renderDetailModal(p) {
-	const imgUrl = p.main_image?.blob_url
+	const images = p.images && p.images.length > 0 ? p.images : []
+	const mainImgUrl = images.length > 0
+		? (images.find(i => i.is_primary) || images[0]).blob_url
+		: p.main_image?.blob_url || null
 	const catId = p.catalogue?.id
 	const catStreamUrl = catId
 		? `${CONFIG.BASE_URL}/api/${CONFIG.API_VERSION}/media/${catId}/stream?tenant=${CONFIG.TENANT_ID}`
@@ -140,17 +146,34 @@ function renderDetailModal(p) {
 	if (canonicalEl) canonicalEl.href = productUrl
 	setMetaTag('og:url', productUrl)
 
+	// Build image gallery HTML
+	const hasMultipleImages = images.length > 1
+	const mainImageHtml = mainImgUrl
+		? `<img id="detail-main-img" src="${escHtml(mainImgUrl)}" alt="${escHtml(p.name)} — L Tork Controls industrial product" width="640" height="300"
+           style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;border:1px solid var(--mid)"
+           loading="lazy"
+           onerror="this.style.display='none'"/>`
+		: ''
+	const thumbnailStripHtml = hasMultipleImages
+		? `<div id="detail-thumbnails" style="display:flex;gap:.4rem;margin-top:.6rem;overflow-x:auto;padding-bottom:4px">
+          ${images
+						.map(
+							(img, i) => `<img src="${escHtml(img.blob_url)}" alt="Thumbnail ${i + 1}"
+                style="width:56px;height:44px;object-fit:cover;border-radius:4px;border:2px solid ${img.is_primary ? 'var(--yellow)' : 'var(--mid)'};cursor:pointer;flex-shrink:0;opacity:0.85;transition:all .15s"
+                onmouseover="this.style.opacity='1';this.style.borderColor='var(--offwhite)'"
+                onmouseout="this.style.opacity='0.85';this.style.borderColor='${img.is_primary ? 'var(--yellow)' : 'var(--mid)'}'"
+                onclick="switchDetailImage('${escHtml(img.blob_url)}', this)"
+                loading="lazy"
+                onerror="this.style.display='none'"/>`,
+						)
+						.join('')}
+        </div>`
+		: ''
+
 	document.getElementById('detail-modal').innerHTML = `
     <button onclick="closeDetailModal()" aria-label="Close"
       style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1;z-index:100">&times;</button>
-    ${
-			imgUrl
-				? `<img src="${escHtml(imgUrl)}" alt="${escHtml(p.name)} — L Tork Controls industrial product" width="640" height="300"
-           style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;margin-bottom:1.2rem;border:1px solid var(--mid)"
-           loading="lazy"
-           onerror="this.style.display='none'"/>`
-				: ''
-		}
+    ${mainImageHtml}${thumbnailStripHtml}
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem">
       <div>
         <h2 style="color:var(--white);margin:0 0 .25rem;font-size:1.35rem">${escHtml(p.name)}</h2>
@@ -175,6 +198,18 @@ function renderDetailModal(p) {
       </button>
     </div>
   `
+}
+
+function switchDetailImage(src, thumbEl) {
+	const mainImg = document.getElementById('detail-main-img')
+	if (mainImg) {
+		mainImg.src = src
+		mainImg.style.display = ''
+	}
+	// Update thumbnail borders
+	const thumbs = document.querySelectorAll('#detail-thumbnails img')
+	thumbs.forEach(t => { t.style.borderColor = 'var(--mid)' })
+	if (thumbEl) thumbEl.style.borderColor = 'var(--yellow)'
 }
 
 // ── CATALOGUE DOWNLOAD / LEAD CAPTURE ──────────────────────────────────────
@@ -353,13 +388,17 @@ document
 function injectProductSchema(product) {
 	document.getElementById('product-schema-jsonld')?.remove()
 
+	const images = product.images && product.images.length > 0 ? product.images : []
+	const primaryImg = images.length > 0
+		? (images.find(i => i.is_primary) || images[0])
+		: null
 	const schema = {
 		'@context': 'https://schema.org',
 		'@type': 'Product',
 		name: product.name,
 		description: product.short_description || product.detailed_description || '',
 		sku: product.sku || undefined,
-		image: product.main_image?.blob_url || undefined,
+		image: primaryImg?.blob_url || product.main_image?.blob_url || undefined,
 		brand: {
 			'@type': 'Brand',
 			name: 'L Tork Controls',

@@ -27,7 +27,10 @@ function renderLandingGrid() {
 
 	grid.innerHTML = visibleProducts
 		.map((p) => {
-			const imgUrl = p.main_image?.blob_url
+			const images = p.images && p.images.length > 0 ? p.images : []
+			const imgUrl = images.length > 0
+				? (images.find(i => i.is_primary) || images[0]).blob_url
+				: p.main_image?.blob_url || null
 			const altText = escHtml(p.name || 'Industrial product')
 			return `
       <div class="product-card">

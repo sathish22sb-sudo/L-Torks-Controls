@@ -1,0 +1,27 @@
+{
+  "name": "l-torks-controls",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:report": "npx playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sathish22sb-sudo/L-Torks-Controls.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sathish22sb-sudo/L-Torks-Controls/issues"
+  },
+  "homepage": "https://github.com/sathish22sb-sudo/L-Torks-Controls#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

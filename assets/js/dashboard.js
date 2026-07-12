@@ -145,10 +145,17 @@ function renderProductsTable() {
 	tbody.innerHTML = paginated
 		.map((p, idx) => {
 			const globalIndex = startIndex + idx + 1
-			const imgUrl = p.main_image?.blob_url
+			const primaryImg = (p.images && p.images.length > 0)
+				? p.images.find(i => i.is_primary) || p.images[0]
+				: null
+			const imgUrl = primaryImg?.blob_url || p.main_image?.blob_url
+			const imgCount = (p.images && p.images.length > 0) ? p.images.length : (imgUrl ? 1 : 0)
 			const altText = escHtml(p.name || 'Product image')
 			const imgCell = imgUrl
-				? `<img src="${imgUrl}" width="52" height="40" alt="${altText}" style="width:52px;height:40px;object-fit:cover;border-radius:4px" loading="lazy" onerror="this.style.display='none'"/>`
+				? `<div style="position:relative;display:inline-block">
+					<img src="${imgUrl}" width="52" height="40" alt="${altText}" style="width:52px;height:40px;object-fit:cover;border-radius:4px" loading="lazy" onerror="this.style.display='none'"/>
+					${imgCount > 1 ? `<span style="position:absolute;bottom:-2px;right:-4px;background:var(--yellow);color:var(--steel);font-size:.55rem;font-weight:700;border-radius:8px;padding:1px 4px">${imgCount}</span>` : ''}
+				</div>`
 				: `<span style="font-size:1.5rem">\u{1F4E6}</span>`
 
 			return `
@@ -192,6 +199,7 @@ function openAddProduct() {
 	document.getElementById('product-form').reset()
 	document.getElementById('p-status').value = 'draft'
 	setSpecsEditor([])
+	clearImagePreview()
 
 	const modalEl = document.getElementById('modal-overlay')
 	const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl)
@@ -213,6 +221,9 @@ async function openEditProduct(id) {
 		const activeSpecs = (p.specifications || []).filter((s) => !s.is_deleted)
 		setSpecsEditor(activeSpecs)
 
+		// Show existing images in preview
+		showExistingImages(p.images || [])
+
 		const modalEl = document.getElementById('modal-overlay')
 		const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl)
 		bsModal.show()
@@ -225,6 +236,53 @@ function closeModal() {
 	const modalEl = document.getElementById('modal-overlay')
 	const bsModal = bootstrap.Modal.getInstance(modalEl)
 	if (bsModal) bsModal.hide()
+}
+
+// ── IMAGE PREVIEW ──────────────────────────────────────────────────────────
+function clearImagePreview() {
+	const preview = document.getElementById('p-image-preview')
+	if (preview) preview.innerHTML = ''
+	const fileInput = document.getElementById('p-image-files')
+	if (fileInput) fileInput.value = ''
+}
+
+function showExistingImages(images) {
+	const preview = document.getElementById('p-image-preview')
+	if (!preview || !images.length) return
+	preview.innerHTML = images
+		.map(
+			(img, i) => `<div style="position:relative;display:inline-block">
+				<img src="${img.blob_url}" alt="Product image ${i + 1}" style="width:60px;height:50px;object-fit:cover;border-radius:4px;border:2px solid ${img.is_primary ? 'var(--yellow)' : 'var(--mid)'}"/>
+				${img.is_primary ? '<span style="position:absolute;top:-4px;left:-4px;background:var(--yellow);color:var(--steel);font-size:.5rem;font-weight:700;border-radius:6px;padding:1px 3px">PRIMARY</span>' : ''}
+			</div>`,
+		)
+		.join('')
+}
+
+function setupImagePreviewListener() {
+	const fileInput = document.getElementById('p-image-files')
+	if (!fileInput) return
+	fileInput.addEventListener('change', () => {
+		const preview = document.getElementById('p-image-preview')
+		if (!preview) return
+		const files = fileInput.files
+		if (!files.length) {
+			preview.innerHTML = ''
+			return
+		}
+		preview.innerHTML = ''
+		for (const file of files) {
+			if (!file.type.startsWith('image/')) continue
+			const reader = new FileReader()
+			reader.onload = (e) => {
+				const div = document.createElement('div')
+				div.style.cssText = 'position:relative;display:inline-block'
+				div.innerHTML = `<img src="${e.target.result}" style="width:60px;height:50px;object-fit:cover;border-radius:4px;border:2px solid var(--mid)"/>`
+				preview.appendChild(div)
+			}
+			reader.readAsDataURL(file)
+		}
+	})
 }
 
 // ── SPECIFICATIONS EDITOR ───────────────────────────────────────────────────
@@ -287,9 +345,13 @@ async function saveProduct() {
 	form.append('status', document.getElementById('p-status').value)
 	form.append('specifications', JSON.stringify(collectSpecs()))
 
-	const imgFile = document.getElementById('p-image-file')?.files?.[0]
+	const imgFiles = document.getElementById('p-image-files')?.files
+	if (imgFiles && imgFiles.length > 0) {
+		for (const file of imgFiles) {
+			form.append('images', file)
+		}
+	}
 	const catFile = document.getElementById('p-catalogue-file')?.files?.[0]
-	if (imgFile) form.append('image', imgFile)
 	if (catFile) form.append('catalogue', catFile)
 
 	const btn = document.getElementById('save-product-btn')
@@ -606,5 +668,6 @@ function applyEnquiryMobileFilters() {
 	if (window.location.pathname.startsWith('/dashboard')) {
 		renderNav('dashboard')
 		initDashboard()
+		setupImagePreviewListener()
 	}
 })()

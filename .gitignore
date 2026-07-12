@@ -5,4 +5,9 @@ node_modules/
 Thumbs.db
 test-*.mjs
 *.md
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+tests/fixtures/
 
