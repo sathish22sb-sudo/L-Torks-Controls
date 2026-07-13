@@ -39,21 +39,25 @@ function renderLandingGrid() {
 
 	const visibleProducts = showAllProducts ? products : products.slice(0, 4)
 
-	grid.innerHTML = visibleProducts
+		grid.innerHTML = visibleProducts
 		.map((p) => {
 			const images = p.images && p.images.length > 0 ? p.images : []
 			const imgUrl = images.length > 0
 				? (images.find(i => i.is_primary) || images[0]).blob_url
 				: p.main_image?.blob_url || null
+			const imgCount = images.length > 0 ? images.length : (imgUrl ? 1 : 0)
 			const altText = escHtml(p.name || 'Industrial product')
 			return `
       <div class="product-card">
         ${
 					imgUrl
-						? `<img class="card-img" src="${imgUrl}" alt="${altText} — L Tork Controls" width="400" height="180"
+						? `<div style="position:relative">
+             <img class="card-img" src="${imgUrl}" alt="${altText} — L Tork Controls" width="400" height="180"
                loading="lazy"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-             <div class="card-img-placeholder" style="display:none"><span>\u{1F4E6}</span></div>`
+             <div class="card-img-placeholder" style="display:none"><span>\u{1F4E6}</span></div>
+             ${imgCount > 1 ? `<span style="position:absolute;bottom:8px;right:8px;background:var(--yellow);color:var(--steel);font-size:.7rem;font-weight:700;border-radius:8px;padding:2px 8px">${imgCount} images</span>` : ''}
+           </div>`
 						: `<div class="card-img-placeholder"><span>\u{1F4E6}</span></div>`
 				}
         <div class="card-body">

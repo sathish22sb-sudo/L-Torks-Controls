@@ -198,14 +198,7 @@ test.describe('Backend Source - Multi-Image Implementation', () => {
 test.describe('Product Card Image Display Logic - Source Code', () => {
   const frontendRoot = path.resolve(__dirname, '..')
 
-  test('homepage uses images array with fallback', () => {
-    const content = fs.readFileSync(path.join(frontendRoot, 'assets', 'js', 'home.js'), 'utf-8')
-    expect(content).toContain('p.images && p.images.length > 0')
-    expect(content).toContain('(images.find(i => i.is_primary) || images[0]).blob_url')
-    expect(content).toContain("p.main_image?.blob_url || null")
-  })
-
-  test('products page uses images array with fallback', () => {
+  test('products page uses images array with fallback (moved from home.js)', () => {
     const content = fs.readFileSync(path.join(frontendRoot, 'assets', 'js', 'products-page.js'), 'utf-8')
     expect(content).toContain('p.images && p.images.length > 0')
     expect(content).toContain('(images.find(i => i.is_primary) || images[0]).blob_url')

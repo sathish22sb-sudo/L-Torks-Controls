@@ -43,7 +43,7 @@ test.describe('Product Form - Multi-Image Input', () => {
 test.describe('Backend API - Products Endpoint', () => {
   test('GET /products returns data', async ({ request }) => {
     const response = await request.get(
-      'https://api.l-torks-controls.online/api/v1/products?status=active&limit=1',
+      'https://api.ltorkcontrols.com/api/v1/products?status=active&limit=1',
       { headers: { 'x-tenant-id': '1' } }
     )
     expect(response.ok()).toBeTruthy()
@@ -54,7 +54,7 @@ test.describe('Backend API - Products Endpoint', () => {
 
   test('each product has id and name', async ({ request }) => {
     const response = await request.get(
-      'https://api.l-torks-controls.online/api/v1/products?status=active&limit=5',
+      'https://api.ltorkcontrols.com/api/v1/products?status=active&limit=5',
       { headers: { 'x-tenant-id': '1' } }
     )
     const json = await response.json()
@@ -68,14 +68,14 @@ test.describe('Backend API - Products Endpoint', () => {
 
   test('GET /products/:id returns detail', async ({ request }) => {
     const listResponse = await request.get(
-      'https://api.l-torks-controls.online/api/v1/products?status=active&limit=1',
+      'https://api.ltorkcontrols.com/api/v1/products?status=active&limit=1',
       { headers: { 'x-tenant-id': '1' } }
     )
     const listJson = await listResponse.json()
     if (listJson.data && listJson.data.length > 0) {
       const productId = listJson.data[0].id
       const detailResponse = await request.get(
-        `https://api.l-torks-controls.online/api/v1/products/${productId}`,
+        `https://api.ltorkcontrols.com/api/v1/products/${productId}`,
         { headers: { 'x-tenant-id': '1' } }
       )
       expect(detailResponse.ok()).toBeTruthy()
@@ -108,8 +108,8 @@ test.describe('Local Source Code - Multi-Image Implementation', () => {
     expect(content).toContain('hasMultipleImages')
   })
 
-  test('home.js contains images array support', () => {
-    const content = fs.readFileSync(path.join(frontendRoot, 'assets', 'js', 'home.js'), 'utf-8')
+  test('products-page.js contains images array support (moved from home.js)', () => {
+    const content = fs.readFileSync(path.join(frontendRoot, 'assets', 'js', 'products-page.js'), 'utf-8')
     expect(content).toContain('p.images')
     expect(content).toContain('is_primary')
   })
@@ -164,7 +164,7 @@ test.describe('Local Backend Source - Multi-Image Implementation', () => {
 
 test.describe('Health Check', () => {
   test('backend health endpoint responds', async ({ request }) => {
-    const response = await request.get('https://api.l-torks-controls.online/health')
+    const response = await request.get(      'https://api.ltorkcontrols.com/health')
     expect(response.ok()).toBeTruthy()
     const json = await response.json()
     expect(json.status).toBe('ok')

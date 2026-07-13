@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'https://l-torks-controls.online',
+    baseURL: 'https://www.ltorkcontrols.com',
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
     actionTimeout: 15000,
