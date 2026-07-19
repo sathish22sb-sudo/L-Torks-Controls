@@ -46,7 +46,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Privacy Policy -->
+  <!-- Policy pages commented out — client has not provided final content yet
   <url>
     <loc>https://www.l-torks-controls.online/privacy</loc>
     <lastmod>2024-01-01</lastmod>
@@ -54,7 +54,6 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Refund Policy -->
   <url>
     <loc>https://www.l-torks-controls.online/refund</loc>
     <lastmod>2024-01-01</lastmod>
@@ -62,7 +61,6 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Shipping Terms -->
   <url>
     <loc>https://www.l-torks-controls.online/shipping</loc>
     <lastmod>2024-01-01</lastmod>
@@ -70,12 +68,12 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- Terms & Conditions -->
   <url>
     <loc>https://www.l-torks-controls.online/terms</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  -->
 
 </urlset>

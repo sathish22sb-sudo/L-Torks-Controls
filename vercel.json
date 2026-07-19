@@ -41,36 +41,8 @@
       "destination": "/dashboard/index.html"
     },
     {
-      "source": "/privacy",
-      "destination": "/privacy/index.html"
-    },
-    {
-      "source": "/privacy/",
-      "destination": "/privacy/index.html"
-    },
-    {
-      "source": "/refund",
-      "destination": "/refund/index.html"
-    },
-    {
-      "source": "/refund/",
-      "destination": "/refund/index.html"
-    },
-    {
-      "source": "/shipping",
-      "destination": "/shipping/index.html"
-    },
-    {
-      "source": "/shipping/",
-      "destination": "/shipping/index.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms/index.html"
-    },
-    {
-      "source": "/terms/",
-      "destination": "/terms/index.html"
+      "source": "/(privacy|refund|shipping|terms)(/.*)?",
+      "destination": "/404.html"
     }
   ],
   "headers": [

@@ -100,6 +100,7 @@ function renderNav(activePage) {
 		<li><a href="/" class="${isActive('home')}">Home</a></li>
 		<li><a href="/about" class="${isActive('about')}">About</a></li>
 		<li><a href="/products" class="${isActive('products')}">Products</a></li>
+		<li><a href="/#services" class="${isActive('home')}">Services</a></li>
 		<li><a href="/contact" class="${isActive('contact')}">Contact</a></li>
 	</ul>`
 
@@ -140,12 +141,6 @@ function renderFooter() {
 	</div>
 	<div class="footer-bottom">
 		<p>&copy; ${new Date().getFullYear()} L Tork Controls. All Rights Reserved. | Designed by <strong>Vici Studio</strong></p>
-		<p style="margin-top:0.4rem">
-			<a href="/privacy" style="font-size:0.78rem">Privacy Policy</a> &nbsp;|&nbsp;
-			<a href="/refund" style="font-size:0.78rem">Refund Policy</a> &nbsp;|&nbsp;
-			<a href="/shipping" style="font-size:0.78rem">Shipping Terms</a> &nbsp;|&nbsp;
-			<a href="/terms" style="font-size:0.78rem">Terms &amp; Conditions</a>
-		</p>
 	</div>`
 
 	const footerEl = document.getElementById('main-footer')
