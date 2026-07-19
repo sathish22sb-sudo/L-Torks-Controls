@@ -10,4 +10,5 @@ test-*.mjs
 /blob-report/
 /playwright/.cache/
 tests/fixtures/
-
+opencode.json.txt
+opencode.json

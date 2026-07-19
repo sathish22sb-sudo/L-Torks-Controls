@@ -46,7 +46,7 @@ let enquiryPageSize = 5
 let enquiryCurrentPage = 1
 
 // ── SEO: Dynamic Metadata + Routing Config ───────────────────────────────────
-const SITE_URL = 'https://www.l-torks-controls.online'
+const SITE_URL = 'https://www.ltorkcontrols.com'
 const DEFAULT_TITLE = 'L Tork Controls | Electrical Actuators, Limit Switches & Industrial Automation in India'
 const DEFAULT_DESC = 'L Tork Controls — trusted manufacturer of electrical actuators, limit switches, control panels and industrial automation solutions since 2000. Based in Arakkonam, Tamil Nadu.'
 
@@ -118,6 +118,8 @@ function updateSEOMeta(pageId, sectionKey) {
 	setMetaTag('og:title', meta.title)
 	setMetaTag('og:description', meta.description)
 	setMetaTag('og:url', meta.canonical)
+	setMetaTag('twitter:title', meta.title)
+	setMetaTag('twitter:description', meta.description)
 
 	const canonicalEl = document.getElementById('dynamic-canonical')
 	if (canonicalEl) canonicalEl.href = meta.canonical

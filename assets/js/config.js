@@ -7,4 +7,4 @@ const CONFIG = {
 	TENANT_ID: '1',
 }
 
-const SITE_URL = 'https://stage.ltorkcontrols.com'
+const SITE_URL = 'https://www.ltorkcontrols.com'
