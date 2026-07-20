@@ -13,28 +13,27 @@ const PAGES = [
 ]
 
 function extract(html, pattern) {
-  var m = html.match(pattern)
+  const m = html.match(pattern)
   return m ? m[1].trim() : null
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     if (req.query.status === 'health') {
       return res.status(200).json({ status: 'ok', service: 'seo-report' })
     }
 
     const results = []
-    for (var i = 0; i < PAGES.length; i++) {
-      var page = PAGES[i]
-      var url = SITE_URL + page.path
+    for (const page of PAGES) {
+      const url = SITE_URL + page.path
       try {
-        var r = await fetch(url, {
-          headers: { 'Accept': 'text/html' },
+        const r = await fetch(url, {
+          headers: { Accept: 'text/html' },
           cache: 'no-store',
           signal: AbortSignal.timeout(10000),
         })
-        var html = await r.text()
-        var issues = []
+        const html = await r.text()
+        const issues = []
         if (!extract(html, /<title[^>]*>([^<]+)<\/title>/i)) issues.push('no_title')
         if (!extract(html, /<meta\s+name="description"/i)) issues.push('no_desc')
         if (!extract(html, /<link\s+rel="canonical"/i)) issues.push('no_canonical')
@@ -42,13 +41,13 @@ module.exports = async function handler(req, res) {
         if (!extract(html, /<meta\s+property="og:title"/i)) issues.push('no_og')
         if (!extract(html, /<script type="application\/ld\+json"/i)) issues.push('no_schema')
 
-        results.push({ name: page.name, path: page.path, score: Math.max(0, 100 - issues.length * 16), issues: issues })
+        results.push({ name: page.name, path: page.path, score: Math.max(0, 100 - issues.length * 16), issues })
       } catch (e) {
         results.push({ name: page.name, path: page.path, score: 0, issues: [(e.message || '').substring(0, 50)] })
       }
     }
 
-    var totalScore = Math.round(results.reduce(function (a, b) { return a + b.score }, 0) / results.length)
+    const totalScore = Math.round(results.reduce((a, b) => a + b.score, 0) / results.length)
     return res.status(200).json({ service: 'seo-report', score: totalScore, pages: results.length, ts: new Date().toISOString() })
   } catch (err) {
     return res.status(200).json({ service: 'seo-report', error: (err.message || '').substring(0, 100) })

@@ -1,5 +1,4 @@
 {
-  "outputDirectory": ".",
   "rewrites": [
     { "source": "/products", "destination": "/products/index.html" },
     { "source": "/products/", "destination": "/products/index.html" },
@@ -22,7 +21,6 @@
     { "source": "/terms", "destination": "/terms/index.html" },
     { "source": "/terms/", "destination": "/terms/index.html" }
   ],
-  "crons": [],
   "headers": [
     {
       "source": "/(.*)",

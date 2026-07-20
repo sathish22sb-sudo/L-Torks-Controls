@@ -1,4 +1,4 @@
-const crypto = require('crypto')
+import crypto from 'crypto'
 
 const SITE_URL = 'https://www.ltorkcontrols.com'
 const PAGES = ['/', '/about', '/products', '/services', '/contact', '/privacy', '/refund', '/shipping', '/terms']
@@ -25,20 +25,19 @@ async function getToken(jwt) {
     body: 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + encodeURIComponent(jwt),
   })
   if (!r.ok) throw new Error('token ' + r.status)
-  const data = await r.json()
-  return data.access_token
+  return (await r.json()).access_token
 }
 
 async function notify(token, url) {
   const r = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: url, type: 'URL_UPDATED' }),
+    body: JSON.stringify({ url, type: 'URL_UPDATED' }),
   })
-  return { url: url, ok: r.ok, status: r.status }
+  return { url, ok: r.ok, status: r.status }
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     if (req.query.status === 'health') {
       return res.status(200).json({ status: 'ok', service: 'ping' })
@@ -60,7 +59,7 @@ module.exports = async function handler(req, res) {
       else fail++
     }
 
-    return res.status(200).json({ service: 'ping', ok: ok, fail: fail, ts: new Date().toISOString() })
+    return res.status(200).json({ service: 'ping', ok, fail, ts: new Date().toISOString() })
   } catch (err) {
     return res.status(200).json({ service: 'ping', error: (err.message || '').substring(0, 100), ts: new Date().toISOString() })
   }
