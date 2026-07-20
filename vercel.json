@@ -20,6 +20,7 @@
     { "source": "/terms/", "destination": "/terms/index.html" }
   ],
   "crons": [
+    { "path": "/api/keepalive", "schedule": "*/10 * * * *" },
     { "path": "/api/ping", "schedule": "0 */6 * * *" },
     { "path": "/api/crawl", "schedule": "0 */12 * * *" }
   ],
