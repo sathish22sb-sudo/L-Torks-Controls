@@ -1,4 +1,10 @@
 {
+  "functions": {
+    "api/keepalive.js": { "runtime": "@vercel/node" },
+    "api/ping.js": { "runtime": "@vercel/node" },
+    "api/crawl.js": { "runtime": "@vercel/node" },
+    "api/seo-report.js": { "runtime": "@vercel/node" }
+  },
   "rewrites": [
     { "source": "/products", "destination": "/products/index.html" },
     { "source": "/products/", "destination": "/products/index.html" },
