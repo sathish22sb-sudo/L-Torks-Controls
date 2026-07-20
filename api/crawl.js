@@ -15,65 +15,42 @@ const PAGES = [
 async function crawlPage(page) {
   const url = `${SITE_URL}${page.path}`
   const start = Date.now()
-
   try {
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 10000)
-
     const res = await fetch(url, {
       method: 'GET',
-      signal: controller.signal,
       cache: 'no-store',
+      signal: AbortSignal.timeout(10000),
     })
-    clearTimeout(timer)
-
-    const elapsed = Date.now() - start
     const html = await res.text()
-
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i)
-    const descMatch = html.match(/<meta\s+name="description"\s+content="([^"]+)"/i)
-    const canonicalMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/i)
-
     return {
       path: page.path,
       status: res.ok ? 'ok' : `HTTP ${res.status}`,
-      ms: elapsed,
+      ms: Date.now() - start,
       title: titleMatch ? titleMatch[1].trim().substring(0, 80) : null,
-      desc: descMatch ? 'yes' : 'no',
-      canonical: canonicalMatch ? 'yes' : 'no',
     }
   } catch (err) {
     return {
       path: page.path,
       status: 'error',
       ms: Date.now() - start,
-      error: err.name === 'AbortError' ? 'timeout' : err.message?.substring(0, 60),
+      error: err.name === 'TimeoutError' ? 'timeout' : (err.message || '').substring(0, 60),
     }
   }
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
-    const results = []
-
-    for (const page of PAGES) {
-      const result = await crawlPage(page)
-      results.push(result)
+    if (req.query.status === 'health') {
+      return res.status(200).json({ status: 'ok', service: 'crawl' })
     }
-
+    const results = []
+    for (const page of PAGES) {
+      results.push(await crawlPage(page))
+    }
     const ok = results.filter((r) => r.status === 'ok').length
-
-    return res.status(200).json({
-      service: 'crawl',
-      ok,
-      total: results.length,
-      ts: new Date().toISOString(),
-    })
+    return res.status(200).json({ service: 'crawl', ok, total: results.length, ts: new Date().toISOString() })
   } catch (err) {
-    return res.status(200).json({
-      service: 'crawl',
-      error: err.message?.substring(0, 100),
-      ts: new Date().toISOString(),
-    })
+    return res.status(200).json({ service: 'crawl', error: (err.message || '').substring(0, 100) })
   }
 }

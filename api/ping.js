@@ -1,11 +1,7 @@
 const crypto = require('crypto')
 
 const SITE_URL = 'https://www.ltorkcontrols.com'
-
-const PAGES = [
-  '/', '/about', '/products', '/services', '/contact',
-  '/privacy', '/refund', '/shipping', '/terms',
-]
+const PAGES = ['/', '/about', '/products', '/services', '/contact', '/privacy', '/refund', '/shipping', '/terms']
 
 function createJWT(sa) {
   const now = Math.floor(Date.now() / 1000)
@@ -17,33 +13,37 @@ function createJWT(sa) {
     exp: now + 3600,
     iat: now,
   })).toString('base64url')
-
-  const input = `${header}.${payload}`
+  const input = header + '.' + payload
   const sig = crypto.createSign('RSA-SHA256').update(input).end().sign(sa.private_key, 'base64url')
-  return `${input}.${sig}`
+  return input + '.' + sig
 }
 
 async function getToken(jwt) {
   const r = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt }),
+    body: 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + encodeURIComponent(jwt),
   })
-  if (!r.ok) throw new Error(`token ${r.status}`)
-  return (await r.json()).access_token
+  if (!r.ok) throw new Error('token ' + r.status)
+  const data = await r.json()
+  return data.access_token
 }
 
 async function notify(token, url) {
   const r = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url, type: 'URL_UPDATED' }),
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: url, type: 'URL_UPDATED' }),
   })
-  return { url, ok: r.ok, status: r.status }
+  return { url: url, ok: r.ok, status: r.status }
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
+    if (req.query.status === 'health') {
+      return res.status(200).json({ status: 'ok', service: 'ping' })
+    }
+
     const keyJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
     if (!keyJson) {
       return res.status(200).json({ service: 'ping', error: 'env_not_set', ts: new Date().toISOString() })
@@ -55,13 +55,13 @@ export default async function handler(req, res) {
 
     let ok = 0, fail = 0
     for (const path of PAGES) {
-      const r = await notify(token, `${SITE_URL}${path}`)
+      const r = await notify(token, SITE_URL + path)
       if (r.ok) ok++
       else fail++
     }
 
-    return res.status(200).json({ service: 'ping', ok, fail, ts: new Date().toISOString() })
+    return res.status(200).json({ service: 'ping', ok: ok, fail: fail, ts: new Date().toISOString() })
   } catch (err) {
-    return res.status(200).json({ service: 'ping', error: err.message?.substring(0, 100), ts: new Date().toISOString() })
+    return res.status(200).json({ service: 'ping', error: (err.message || '').substring(0, 100), ts: new Date().toISOString() })
   }
 }
