@@ -22,9 +22,7 @@
     { "source": "/terms", "destination": "/terms/index.html" },
     { "source": "/terms/", "destination": "/terms/index.html" }
   ],
-  "crons": [
-    { "path": "/api/keepalive", "schedule": "*/10 * * * *" }
-  ],
+  "crons": [],
   "headers": [
     {
       "source": "/(.*)",
