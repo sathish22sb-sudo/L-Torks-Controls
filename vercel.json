@@ -1,77 +1,27 @@
 {
   "rewrites": [
-    {
-      "source": "/products",
-      "destination": "/products/index.html"
-    },
-    {
-      "source": "/products/",
-      "destination": "/products/index.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/about/index.html"
-    },
-    {
-      "source": "/about/",
-      "destination": "/about/index.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/contact/index.html"
-    },
-    {
-      "source": "/contact/",
-      "destination": "/contact/index.html"
-    },
-    {
-      "source": "/login",
-      "destination": "/login/index.html"
-    },
-    {
-      "source": "/login/",
-      "destination": "/login/index.html"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "/dashboard/index.html"
-    },
-    {
-      "source": "/dashboard/",
-      "destination": "/dashboard/index.html"
-    },
-    {
-      "source": "/privacy",
-      "destination": "/privacy/index.html"
-    },
-    {
-      "source": "/privacy/",
-      "destination": "/privacy/index.html"
-    },
-    {
-      "source": "/refund",
-      "destination": "/refund/index.html"
-    },
-    {
-      "source": "/refund/",
-      "destination": "/refund/index.html"
-    },
-    {
-      "source": "/shipping",
-      "destination": "/shipping/index.html"
-    },
-    {
-      "source": "/shipping/",
-      "destination": "/shipping/index.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms/index.html"
-    },
-    {
-      "source": "/terms/",
-      "destination": "/terms/index.html"
-    }
+    { "source": "/products", "destination": "/products/index.html" },
+    { "source": "/products/", "destination": "/products/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/about/", "destination": "/about/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/contact/", "destination": "/contact/index.html" },
+    { "source": "/login", "destination": "/login/index.html" },
+    { "source": "/login/", "destination": "/login/index.html" },
+    { "source": "/dashboard", "destination": "/dashboard/index.html" },
+    { "source": "/dashboard/", "destination": "/dashboard/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "/privacy/", "destination": "/privacy/index.html" },
+    { "source": "/refund", "destination": "/refund/index.html" },
+    { "source": "/refund/", "destination": "/refund/index.html" },
+    { "source": "/shipping", "destination": "/shipping/index.html" },
+    { "source": "/shipping/", "destination": "/shipping/index.html" },
+    { "source": "/terms", "destination": "/terms/index.html" },
+    { "source": "/terms/", "destination": "/terms/index.html" }
+  ],
+  "crons": [
+    { "path": "/api/ping", "schedule": "0 */6 * * *" },
+    { "path": "/api/crawl", "schedule": "0 */12 * * *" }
   ],
   "headers": [
     {

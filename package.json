@@ -1,20 +1,31 @@
 {
   "name": "l-torks-controls",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "L Tork Controls — Electrical Actuators, Limit Switches & Industrial Automation",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:ui": "npx playwright test --ui",
-    "test:report": "npx playwright show-report"
+    "test:report": "npx playwright show-report",
+    "bots:run": "node bots/search-runner.js",
+    "bots:headless": "node bots/search-runner.js --headless",
+    "api:ping": "curl http://localhost:3000/api/ping",
+    "api:crawl": "curl http://localhost:3000/api/crawl",
+    "api:seo": "curl http://localhost:3000/api/seo-report"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sathish22sb-sudo/L-Torks-Controls.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "electrical actuators",
+    "limit switches",
+    "industrial automation",
+    "control panels",
+    "ltork controls"
+  ],
+  "author": "L Tork Controls",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -22,6 +33,7 @@
   },
   "homepage": "https://github.com/sathish22sb-sudo/L-Torks-Controls#readme",
   "devDependencies": {
-    "@playwright/test": "^1.61.1"
+    "@playwright/test": "^1.61.1",
+    "playwright": "^1.61.1"
   }
 }
